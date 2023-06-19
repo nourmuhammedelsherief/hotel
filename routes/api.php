@@ -26,6 +26,7 @@ Route::domain('{account}.localhost')->group(function () {
             Route::get('/galleries' , 'photos');
             Route::get('/rate_branches' , 'rate_branches');
             Route::post('/rate_hotel' , 'rate_hotel');
+            Route::get('/contact_us' , 'contact_us');
 
         });
     });

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Site;
 
 use App\Http\Controllers\Api\ApiController;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Hotel\HotelContactResource;
 use App\Http\Resources\Hotel\HotelGalleryCollection;
 use App\Http\Resources\Hotel\HotelLocationCollection;
 use App\Http\Resources\Hotel\HotelRateBranchCollection;
@@ -12,6 +13,7 @@ use App\Http\Resources\Hotel\HotelSliderResource;
 use App\Http\Resources\Hotel\SiteHotelResource;
 use App\Models\Hotel;
 use App\Models\Hotel\HotelRate;
+use App\Models\Hotel\HotelContact;
 use App\Models\HotelSlider;
 use Illuminate\Http\Request;
 use Validator;
@@ -134,6 +136,24 @@ class HomeController extends Controller
                 'message' => trans('messages.hotelRatedSuccessfully'),
             ];
             return ApiController::respondWithSuccess($success);
+        }else{
+            $error = ['message' => trans('messages.not_found')];
+            return ApiController::respondWithErrorNOTFoundObject($error);
+        }
+    }
+    public function contact_us($subdomain)
+    {
+        $hotel = Hotel::whereSubdomain($subdomain)->first();
+        if ($hotel)
+        {
+            $contact = HotelContact::whereHotelId($hotel->id)->first();
+            if ($contact)
+            {
+                return ApiController::respondWithSuccess(new HotelContactResource($contact));
+            }else{
+                $error = ['message' => trans('messages.not_found')];
+                return ApiController::respondWithErrorNOTFoundObject($error);
+            }
         }else{
             $error = ['message' => trans('messages.not_found')];
             return ApiController::respondWithErrorNOTFoundObject($error);

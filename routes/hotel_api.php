@@ -11,6 +11,7 @@ use \App\Http\Controllers\Api\HotelController\LocationController;
 use \App\Http\Controllers\Api\HotelController\GalleryCategoryController;
 use \App\Http\Controllers\Api\HotelController\GalleryController;
 use \App\Http\Controllers\Api\HotelController\HotelRateBranchController;
+use \App\Http\Controllers\Api\HotelController\HotelContactController;
 // hotel controllers
 
 /*
@@ -91,8 +92,9 @@ Route::group(['middleware' => ['auth:hotel-api', 'cors', 'localization']], funct
             Route::get('/rates' , 'rates');
             Route::get('/rates/{id}/delete' , 'destroy_rate');
         });
-
+        Route::controller(HotelContactController::class)->group(function (){
+            Route::get('/contact_info' , 'show');
+            Route::post('/contact_info/{id}/edit' , 'edit');
+        });
     });
 });
-
-//لا  اله  الا الله محمد رسول الله
