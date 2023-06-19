@@ -19,3 +19,5 @@ yarn-error.log
 /.vscode
 public
 app/Providers/RouteServiceProvider.php
+api.php
+

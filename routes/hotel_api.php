@@ -95,4 +95,4 @@ Route::group(['middleware' => ['auth:hotel-api', 'cors', 'localization']], funct
     });
 });
 
-
+//لا  اله  الا الله محمد رسول الله
