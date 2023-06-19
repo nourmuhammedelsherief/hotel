@@ -30,6 +30,3 @@ Route::domain('{account}.localhost')->group(function () {
         });
     });
 });
-
-
-//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
