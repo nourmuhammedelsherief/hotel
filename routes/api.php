@@ -16,7 +16,7 @@ use \App\Http\Controllers\Api\Site\HotelInformationController;
 |
 */
 
-Route::domain('{account}.localhost')->group(function () {
+Route::domain('{account}.easyhotelll.com')->group(function () {
     Route::group(['middleware' => ['cors', 'localization']], function () {
         Route::controller(HomeController::class)->group(function (){
             Route::get('/' , 'index');
