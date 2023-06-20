@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\Api\Site\HomeController;
+use \App\Http\Controllers\Api\Site\HotelInformationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,7 +16,7 @@ use \App\Http\Controllers\Api\Site\HomeController;
 |
 */
 
-Route::domain('{account}.easyhotelll.com')->group(function () {
+Route::domain('{account}.localhost')->group(function () {
     Route::group(['middleware' => ['cors', 'localization']], function () {
         Route::controller(HomeController::class)->group(function (){
             Route::get('/' , 'index');
@@ -27,6 +28,11 @@ Route::domain('{account}.easyhotelll.com')->group(function () {
             Route::get('/rate_branches' , 'rate_branches');
             Route::post('/rate_hotel' , 'rate_hotel');
             Route::get('/contact_us' , 'contact_us');
+        });
+        Route::controller(HotelInformationController::class)->group(function (){
+            Route::get('/information_about_us' , 'information_about_us');
+            Route::get('/information_categories' , 'information_categories');
+            Route::get('/information_category_items/{id}' , 'information_category_items');
         });
     });
 });

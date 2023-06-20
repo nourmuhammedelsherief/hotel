@@ -12,6 +12,9 @@ use \App\Http\Controllers\Api\HotelController\GalleryCategoryController;
 use \App\Http\Controllers\Api\HotelController\GalleryController;
 use \App\Http\Controllers\Api\HotelController\HotelRateBranchController;
 use \App\Http\Controllers\Api\HotelController\HotelContactController;
+use \App\Http\Controllers\Api\HotelController\HotelInformationController;
+use \App\Http\Controllers\Api\HotelController\HotelInfoCategoryController;
+use \App\Http\Controllers\Api\HotelController\HotelInfoCategoryItemController;
 // hotel controllers
 
 /*
@@ -95,6 +98,25 @@ Route::group(['middleware' => ['auth:hotel-api', 'cors', 'localization']], funct
         Route::controller(HotelContactController::class)->group(function (){
             Route::get('/contact_info' , 'show');
             Route::post('/contact_info/{id}/edit' , 'edit');
+        });
+        Route::controller(HotelInformationController::class)->group(function (){
+            Route::get('/information_about_us' , 'show');
+            Route::post('/information_about_us/{id}/edit' , 'edit');
+        });
+        Route::controller(HotelInfoCategoryController::class)->group(function (){
+            Route::get('/information_categories' , 'index');
+            Route::post('/information_categories/create' , 'create');
+            Route::post('/information_categories/{id}/edit' , 'edit');
+            Route::get('/information_categories/{id}/show' , 'show');
+            Route::get('/information_categories/{id}/delete' , 'destroy');
+        });
+        Route::controller(HotelInfoCategoryItemController::class)->group(function (){
+            Route::get('/information_categories_items/{id}' , 'index');
+            Route::post('/information_categories_items/{id}/create' , 'create');
+            Route::post('/information_categories_items/{id}/edit' , 'edit');
+            Route::get('/information_categories_items/{id}/show' , 'show');
+            Route::get('/information_categories_items/{id}/delete' , 'destroy');
+            Route::get('/remove_item_slider_photo/{id}/delete' , 'remove_item_slider_photo');
         });
     });
 });

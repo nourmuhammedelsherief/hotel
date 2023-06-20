@@ -44,13 +44,13 @@ class HotelContactController extends Controller
                 return ApiController::respondWithErrorArray(validateRules($validator->errors(), $rules));
 
             $contact->update([
-                'email'     => $request->email,
-                'phone'     => $request->phone,
-                'address'   => $request->address,
-                'twitter'   => $request->twitter,
-                'instagram' => $request->instagram,
-                'snapchat'  => $request->snapchat,
-                'site'      => $request->site,
+                'email'     => $request->email == null ? $contact->email : $request->email,
+                'phone'     => $request->phone == null ? $contact->phone : $request->phone,
+                'address'   => $request->address == null ? $contact->address : $request->address,
+                'twitter'   => $request->twitter  == null ? $contact->twitter : $request->twitter,
+                'instagram' => $request->instagram == null ? $contact->instagram : $request->instagram,
+                'snapchat'  => $request->snapchat == null ? $contact->snapchat : $request->snapchat,
+                'site'      => $request->site == null ? $contact->site : $request->site,
             ]);
             return ApiController::respondWithSuccess(new HotelContactResource($contact));
         }else{

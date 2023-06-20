@@ -159,5 +159,8 @@ return [
         'reception'             => 'الاستقبال',
         'speed'                 => 'السرعة',
         'staff'                 => 'العاملين',
+        'description_ar'        => 'الوصف بالعربي',
+        'description_en'        => 'الوصف بالانجليزي',
+        'sliders'               => 'السلايدر',
     ],
 ];

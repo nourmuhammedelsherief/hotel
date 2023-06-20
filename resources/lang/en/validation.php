@@ -162,6 +162,9 @@ return [
         'reception'             => 'Reception',
         'speed'                 => 'Speed',
         'staff'                 => 'Staff',
+        'description_ar'        => 'Description In Arabic',
+        'description_en'        => 'Description In English',
+        'sliders'               => 'Sliders',
     ],
 
 ];
