@@ -15,6 +15,9 @@ use \App\Http\Controllers\Api\HotelController\HotelContactController;
 use \App\Http\Controllers\Api\HotelController\HotelInformationController;
 use \App\Http\Controllers\Api\HotelController\HotelInfoCategoryController;
 use \App\Http\Controllers\Api\HotelController\HotelInfoCategoryItemController;
+use \App\Http\Controllers\Api\HotelController\HotelServiceController;
+use \App\Http\Controllers\Api\HotelController\HotelServiceCategoryController;
+use \App\Http\Controllers\Api\HotelController\HotelServiceCategoryItemController;
 // hotel controllers
 
 /*
@@ -99,6 +102,7 @@ Route::group(['middleware' => ['auth:hotel-api', 'cors', 'localization']], funct
             Route::get('/contact_info' , 'show');
             Route::post('/contact_info/{id}/edit' , 'edit');
         });
+        // hotel information routes
         Route::controller(HotelInformationController::class)->group(function (){
             Route::get('/information_about_us' , 'show');
             Route::post('/information_about_us/{id}/edit' , 'edit');
@@ -116,6 +120,26 @@ Route::group(['middleware' => ['auth:hotel-api', 'cors', 'localization']], funct
             Route::post('/information_categories_items/{id}/edit' , 'edit');
             Route::get('/information_categories_items/{id}/show' , 'show');
             Route::get('/information_categories_items/{id}/delete' , 'destroy');
+            Route::get('/remove_item_slider_photo/{id}/delete' , 'remove_item_slider_photo');
+        });
+        // hotel services routes
+        Route::controller(HotelServiceController::class)->group(function (){
+            Route::get('/our_services' , 'show');
+            Route::post('/our_services/{id}/edit' , 'edit');
+        });
+        Route::controller(HotelServiceCategoryController::class)->group(function (){
+            Route::get('/service_categories' , 'index');
+            Route::post('/service_categories/create' , 'create');
+            Route::post('/service_categories/{id}/edit' , 'edit');
+            Route::get('/service_categories/{id}/show' , 'show');
+            Route::get('/service_categories/{id}/delete' , 'destroy');
+        });
+        Route::controller(HotelServiceCategoryItemController::class)->group(function (){
+            Route::get('/service_category_items/{id}' , 'index');
+            Route::post('/service_category_items/{id}/create' , 'create');
+            Route::post('/service_category_items/{id}/edit' , 'edit');
+            Route::get('/service_category_items/{id}/show' , 'show');
+            Route::get('/service_category_items/{id}/delete' , 'destroy');
             Route::get('/remove_item_slider_photo/{id}/delete' , 'remove_item_slider_photo');
         });
     });

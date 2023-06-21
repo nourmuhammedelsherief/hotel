@@ -50,7 +50,7 @@ class HotelInformationController extends Controller
                 'name_en'  => $request->name_en == null ? $info->name_en : $request->name_en,
                 'description_ar' => $request->description_ar == null ? $info->description_ar : $request->description_ar,
                 'description_en' => $request->description_en == null ? $info->description_en : $request->description_en,
-                'icon'  => $request->file('icon') == null ? $info->info : UploadImageEdit($request->file('icon') , 'icon' , '/uploads/icons' , $info->icon)
+                'icon'  => $request->file('icon') == null ? $info->icon : ($info->icon == 'icon.png' ? UploadImage($request->file('icon') , 'icon' , '/uploads/icons') : UploadImageEdit($request->file('icon') , 'icon' , '/uploads/icons' , $info->icon))
             ]);
             return ApiController::respondWithSuccess(new HotelInformationResource($info));
         }else{
@@ -58,5 +58,4 @@ class HotelInformationController extends Controller
             return ApiController::respondWithErrorNOTFoundObject($error);
         }
     }
-
 }
