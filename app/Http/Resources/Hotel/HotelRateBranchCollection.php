@@ -20,8 +20,7 @@ class HotelRateBranchCollection extends ResourceCollection
                 return [
                     'id'       => $query->id,
                     'hotel_id' => intval($query->hotel_id),
-                    'name_ar' => $query->name_ar,
-                    'name_en' => $query->name_en,
+                    'name'     => app()->getLocale() == 'ar' ? $query->name_ar : $query->name_en,
                     'created_at' => $query->created_at->format('Y-m-d')
                 ];
             }),

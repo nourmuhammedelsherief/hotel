@@ -20,10 +20,8 @@ class HotelServiceCategoryItemCollection extends ResourceCollection
                 return [
                     'id'   => $query->id,
                     'hotel_service_cat_id' => $query->hotel_service_cat_id,
-                    'name_ar'         => $query->name_ar,
-                    'name_en'         => $query->name_en,
-                    'description_ar'  => $query->description_ar,
-                    'description_en'  => $query->description_en,
+                    'name'         => app()->getLocale() == 'ar' ? $query->name_ar : $query->name_en,
+                    'description'  => app()->getLocale() == 'ar' ? $query->description_ar : $query->description_en,
                     'sliders'         => HotelServiceCategoryItemPhotoResource::collection($query->sliders)
                 ];
             }),

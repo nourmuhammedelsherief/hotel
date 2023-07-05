@@ -5,7 +5,7 @@ namespace App\Http\Resources\Hotel;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
-class HotelServiceCategoryCollection extends ResourceCollection
+class HotelNearServiceCategoryCollection extends ResourceCollection
 {
     /**
      * Transform the resource collection into an array.
@@ -20,9 +20,9 @@ class HotelServiceCategoryCollection extends ResourceCollection
                 return [
                     'id'  => $query->id,
                     'hotel_id' => $query->hotel_id,
-                    'hotel_service_id' => $query->hotel_service_id,
-                    'name'    => app()->getLocale() == 'ar' ? $query->name_ar : $query->name_en,
-                    'photo' => $query->photo == null ? null : asset('/uploads/service_categories/'.$query->photo)
+                    'hotel_near_id' => $query->hotel_near_id,
+                    'name'  => app()->getLocale() == 'ar' ? $query->name_ar : $query->name_en,
+                    'photo' => $query->photo == null ? null : asset('/uploads/near_service_categories/'.$query->photo)
                 ];
             }),
             'first_page_url' => $this->url(1),

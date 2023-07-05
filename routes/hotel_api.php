@@ -18,6 +18,9 @@ use \App\Http\Controllers\Api\HotelController\HotelInfoCategoryItemController;
 use \App\Http\Controllers\Api\HotelController\HotelServiceController;
 use \App\Http\Controllers\Api\HotelController\HotelServiceCategoryController;
 use \App\Http\Controllers\Api\HotelController\HotelServiceCategoryItemController;
+use \App\Http\Controllers\Api\HotelController\HotelNearServiceController;
+use \App\Http\Controllers\Api\HotelController\HotelNearServiceCategoryController;
+use \App\Http\Controllers\Api\HotelController\HotelNearServiceCategoryItemController;
 // hotel controllers
 
 /*
@@ -140,7 +143,29 @@ Route::group(['middleware' => ['auth:hotel-api', 'cors', 'localization']], funct
             Route::post('/service_category_items/{id}/edit' , 'edit');
             Route::get('/service_category_items/{id}/show' , 'show');
             Route::get('/service_category_items/{id}/delete' , 'destroy');
-            Route::get('/remove_item_slider_photo/{id}/delete' , 'remove_item_slider_photo');
+            Route::get('/remove_service_item_photo/{id}/delete' , 'remove_service_item_photo');
         });
+
+        // hotel near services routes
+        Route::controller(HotelNearServiceController::class)->group(function (){
+            Route::get('/near_services' , 'show');
+            Route::post('/near_services/{id}/edit' , 'edit');
+        });
+        Route::controller(HotelNearServiceCategoryController::class)->group(function (){
+            Route::get('/near_service_categories' , 'index');
+            Route::post('/near_service_categories/create' , 'create');
+            Route::post('/near_service_categories/{id}/edit' , 'edit');
+            Route::get('/near_service_categories/{id}/show' , 'show');
+            Route::get('/near_service_categories/{id}/delete' , 'destroy');
+        });
+        Route::controller(HotelNearServiceCategoryItemController::class)->group(function (){
+            Route::get('/near_service_category_items/{id}' , 'index');
+            Route::post('/near_service_category_items/{id}/create' , 'create');
+            Route::post('/near_service_category_items/{id}/edit' , 'edit');
+            Route::get('/near_service_category_items/{id}/show' , 'show');
+            Route::get('/near_service_category_items/{id}/delete' , 'destroy');
+            Route::get('/remove_near_item_photo/{id}/delete' , 'remove_near_item_photo');
+        });
+
     });
 });

@@ -21,8 +21,7 @@ class HotelInfoCategoryCollection extends ResourceCollection
                     'id'  => $query->id,
                     'hotel_id' => $query->hotel_id,
                     'hotel_information_id' => $query->hotel_information_id,
-                    'name_ar' => $query->name_ar,
-                    'name_en' => $query->name_en,
+                    'name'    => app()->getLocale() == 'ar' ? $query->name_ar : $query->name_en,
                 ];
             }),
             'first_page_url' => $this->url(1),

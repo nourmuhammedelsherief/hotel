@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\Api\Site\HomeController;
 use \App\Http\Controllers\Api\Site\HotelInformationController;
 use \App\Http\Controllers\Api\Site\HotelOurServiceController;
+use \App\Http\Controllers\Api\Site\HotelNearServiceController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,7 +17,6 @@ use \App\Http\Controllers\Api\Site\HotelOurServiceController;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
-
 Route::domain('{account}.easyhotelll.com')->group(function () {
     Route::group(['middleware' => ['cors', 'localization']], function () {
         Route::controller(HomeController::class)->group(function (){
@@ -39,6 +39,11 @@ Route::domain('{account}.easyhotelll.com')->group(function () {
             Route::get('/our_services' , 'our_services');
             Route::get('/our_services_categories' , 'our_services_categories');
             Route::get('/our_services_category_items/{id}' , 'our_services_category_items');
+        });
+        Route::controller(HotelNearServiceController::class)->group(function (){
+            Route::get('/near_services' , 'near_services');
+            Route::get('/near_services_categories' , 'near_services_categories');
+            Route::get('/near_services_category_items/{id}' , 'near_services_category_items');
         });
     });
 });

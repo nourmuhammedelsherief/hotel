@@ -77,7 +77,6 @@ class HotelServiceCategoryItemController extends Controller
             return ApiController::respondWithErrorNOTFoundObject($error);
         }
     }
-
     public function edit(Request $request, $id)
     {
         $item = HotelServiceCategoryItem::find($id);
@@ -153,8 +152,7 @@ class HotelServiceCategoryItemController extends Controller
             return ApiController::respondWithErrorNOTFoundObject($error);
         }
     }
-
-    public function remove_item_slider_photo($id)
+    public function remove_service_item_photo($id)
     {
         $slider = HotelServiceCategoryItemPhoto::find($id);
         if ($slider)
