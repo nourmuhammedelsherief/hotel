@@ -33,8 +33,8 @@ class RouteServiceProvider extends ServiceProvider
                 ->group(base_path('routes/admin_api.php'));
             Route::domain('console.localhost')
                 ->group(base_path('routes/hotel_api.php'));
-            Route::middleware('api')
-//                ->prefix('api')
+            Route::domain('api-site.localhost')
+                ->prefix('api')
                 ->group(base_path('routes/api.php'));
             Route::middleware('web')
                 ->group(base_path('routes/web.php'));
