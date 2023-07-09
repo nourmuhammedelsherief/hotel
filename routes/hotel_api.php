@@ -42,12 +42,14 @@ Route::middleware(['cors', 'localization'])->group(function () {
         Route::post('/register', 'register');
         Route::post('/verify_phone_number', 'verify_phone');
     });
+    Route::controller(HotelController::class)->group(function () {
+        Route::get('/countries' , 'countries');
+        Route::get('/cities/{id}' , 'cities');
+    });
 });
 Route::group(['middleware' => ['auth:hotel-api', 'cors', 'localization']], function () {
     Route::prefix('dashboard')->group(function () {
         Route::controller(HotelController::class)->group(function () {
-            Route::get('/countries' , 'countries');
-            Route::get('/cities/{id}' , 'cities');
             Route::get('/profile', 'profile');
             Route::get('/barcode_url', 'barcode');
             Route::post('/change_password', 'changePassword');
