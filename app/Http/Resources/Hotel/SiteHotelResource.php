@@ -2,6 +2,8 @@
 
 namespace App\Http\Resources\Hotel;
 
+use App\Http\Resources\Admin\CityResource;
+use App\Http\Resources\Admin\CountryResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -21,8 +23,8 @@ class SiteHotelResource extends JsonResource
             'status'  => $this->status,
             'archive' => $this->archive,
             'logo' => $this->logo == null ? null : asset('uploads/logo/' . $this->logo),
-            'country_id' => $this->country_id,
-            'city_id' => $this->city_id,
+            'country_id' => new CountryResource($this->country),
+            'city_id' => new CityResource($this->city),
             'package_id' => $this->package_id,
             'email' => $this->email,
             'phone_number' => $this->phone_number,

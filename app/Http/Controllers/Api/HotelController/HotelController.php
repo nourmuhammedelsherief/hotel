@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\HotelController;
 use App\Http\Controllers\Api\ApiController;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Admin\HotelResource;
+use App\Models\Hotel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Validator;
@@ -83,6 +84,17 @@ class HotelController extends Controller
         $hotel = $request->user();
         $url = $hotel->subdomain.'.'.domain();
         return ApiController::respondWithSuccess(['barcode_url' => $url]);
+    }
+    public function logout(Request $request)
+    {
+        $admin = Hotel::find($request->user()->id);
+        $admin->update([
+            'api_token' => null
+        ]);
+        $success = [
+            'message' => trans('messages.logout_successfully')
+        ];
+        return ApiController::respondWithSuccess($success);
     }
 }
 
