@@ -4,7 +4,11 @@ namespace App\Http\Controllers\Api\HotelController;
 
 use App\Http\Controllers\Api\ApiController;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Admin\CityResource;
+use App\Http\Resources\Admin\CountryResource;
 use App\Http\Resources\Admin\HotelResource;
+use App\Models\City;
+use App\Models\Country;
 use App\Models\Hotel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -95,6 +99,16 @@ class HotelController extends Controller
             'message' => trans('messages.logout_successfully')
         ];
         return ApiController::respondWithSuccess($success);
+    }
+    public function countries()
+    {
+        $countries = Country::orderBy('id' , 'desc')->get();
+        return ApiController::respondWithSuccess(CountryResource::collection($countries));
+    }
+    public function country_cities($id)
+    {
+        $cities = City::whereCountryId($id)->orderBy('id' , 'desc')->get();
+        return ApiController::respondWithSuccess(CityResource::collection($cities));
     }
 }
 

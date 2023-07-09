@@ -48,7 +48,6 @@ Route::group(['middleware' => ['auth:admin-api', 'cors', 'localization']], funct
         // country routes
         Route::controller(CountryController::class)->group(function () {
             Route::get('countries', 'index');
-            Route::get('country_cities/{id}', 'country_cities');
             Route::get('countries/{id}', 'show');
             Route::post('countries/create', 'create');
             Route::post('countries/{id}/edit', 'edit');
