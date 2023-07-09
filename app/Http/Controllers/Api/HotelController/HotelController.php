@@ -105,7 +105,7 @@ class HotelController extends Controller
         $countries = Country::orderBy('id' , 'desc')->get();
         return ApiController::respondWithSuccess(CountryResource::collection($countries));
     }
-    public function country_cities($id)
+    public function cities($id)
     {
         $cities = City::whereCountryId($id)->orderBy('id' , 'desc')->get();
         return ApiController::respondWithSuccess(CityResource::collection($cities));
