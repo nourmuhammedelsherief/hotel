@@ -137,7 +137,7 @@ class AuthHotelController extends Controller
                 $success = [
                     'message' => trans('messages.phone_verified_successfully'),
                 ];
-                return ApiController::respondWithSuccess($success);
+                return ApiController::respondWithSuccess(new HotelResource($hotel));
             }else{
                 $error = [
                     'message' => trans('messages.error_code')
