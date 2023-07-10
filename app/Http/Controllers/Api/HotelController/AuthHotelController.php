@@ -131,6 +131,7 @@ class AuthHotelController extends Controller
                 $hotel->update([
                     'phone_verified_at' => Carbon::now(),
                     'status' => 'tentative',
+                    'api_token' => generateApiToken($hotel->id, 50),
                     'phone_verification' => null
                 ]);
                 $success = [
