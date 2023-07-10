@@ -43,6 +43,7 @@ class HotelController extends Controller
             $hotels = Hotel::whereHas('subscription' , function ($q) use ($status){
                 $q->whereStatus($status);
             })
+                ->whereStatus($status)
                 ->whereAdminActivation('true')
                 ->whereArchive('false')
                 ->paginate();

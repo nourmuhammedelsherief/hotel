@@ -42,7 +42,7 @@ class AuthHotelController extends Controller
             'name_ar'       => $request->name_ar,
             'name_en'       => $request->name_en,
             'subdomain'     => $request->subdomain,
-            'status'        => 'tentative',
+            'status'        => 'in_complete',
             'logo'          => 'logo.png',
             'country_id'    => $request->country_id,
             'city_id'       => $request->city_id,
@@ -130,6 +130,7 @@ class AuthHotelController extends Controller
             {
                 $hotel->update([
                     'phone_verified_at' => Carbon::now(),
+                    'status' => 'tentative',
                     'phone_verification' => null
                 ]);
                 $success = [
