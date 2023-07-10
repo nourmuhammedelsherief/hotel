@@ -36,6 +36,9 @@ class HotelController extends Controller
         }elseif ($status == 'archived'){
             $hotels = Hotel::whereArchive('true')
                 ->paginate();
+        }elseif ($status == 'in_complete'){
+            $hotels = Hotel::whereStatus($status)
+                ->paginate();
         }else{
             $hotels = Hotel::whereHas('subscription' , function ($q) use ($status){
                 $q->whereStatus($status);
