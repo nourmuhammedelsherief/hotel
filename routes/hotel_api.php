@@ -174,10 +174,10 @@ Route::group(['middleware' => ['auth:hotel-api', 'cors', 'localization']], funct
         // hotel pixel routes
         Route::controller(HotelPixelController::class)->group(function (){
             Route::get('/pixel_codes' , 'index');
-            Route::post('/pixel_code/create' , 'create');
-            Route::post('/pixel_code/{id}/edit' , 'edit');
-            Route::get('/pixel_code/{id}/show' , 'show');
-            Route::get('/pixel_code/{id}/delete' , 'destroy');
+            Route::post('/pixel_codes/create' , 'create');
+            Route::post('/pixel_codes/{id}/edit' , 'edit');
+            Route::get('/pixel_codes/{id}/show' , 'show');
+            Route::get('/pixel_codes/{id}/delete' , 'destroy');
         });
     });
 });
