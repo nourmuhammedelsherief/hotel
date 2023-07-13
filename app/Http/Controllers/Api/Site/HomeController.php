@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\Hotel\HotelContactResource;
 use App\Http\Resources\Hotel\HotelGalleryCollection;
 use App\Http\Resources\Hotel\HotelLocationCollection;
+use App\Http\Resources\Hotel\HotelPixelResource;
 use App\Http\Resources\Hotel\HotelRateBranchCollection;
 use App\Http\Resources\Hotel\HotelReservationCollection;
 use App\Http\Resources\Hotel\HotelSliderResource;
@@ -15,6 +16,7 @@ use App\Models\Hotel;
 use App\Models\Hotel\HotelRate;
 use App\Models\Hotel\HotelContact;
 use App\Models\HotelSlider;
+use App\Models\Hotel\HotelPixel;
 use Illuminate\Http\Request;
 use Validator;
 
@@ -154,6 +156,18 @@ class HomeController extends Controller
                 $error = ['message' => trans('messages.not_found')];
                 return ApiController::respondWithErrorNOTFoundObject($error);
             }
+        }else{
+            $error = ['message' => trans('messages.not_found')];
+            return ApiController::respondWithErrorNOTFoundObject($error);
+        }
+    }
+    public function pixel_codes($subdomain)
+    {
+        $hotel = Hotel::whereSubdomain($subdomain)->first();
+        if ($hotel)
+        {
+            $codes = HotelPixel::whereHotelId($hotel->id)->first();
+            return ApiController::respondWithSuccess(HotelPixelResource::collection($codes));
         }else{
             $error = ['message' => trans('messages.not_found')];
             return ApiController::respondWithErrorNOTFoundObject($error);

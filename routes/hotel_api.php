@@ -21,6 +21,7 @@ use \App\Http\Controllers\Api\HotelController\HotelServiceCategoryItemController
 use \App\Http\Controllers\Api\HotelController\HotelNearServiceController;
 use \App\Http\Controllers\Api\HotelController\HotelNearServiceCategoryController;
 use \App\Http\Controllers\Api\HotelController\HotelNearServiceCategoryItemController;
+use \App\Http\Controllers\Api\HotelController\HotelPixelController;
 // hotel controllers
 
 /*
@@ -170,6 +171,13 @@ Route::group(['middleware' => ['auth:hotel-api', 'cors', 'localization']], funct
             Route::get('/near_service_category_items/{id}/delete' , 'destroy');
             Route::get('/remove_near_item_photo/{id}/delete' , 'remove_near_item_photo');
         });
-
+        // hotel pixel routes
+        Route::controller(HotelPixelController::class)->group(function (){
+            Route::get('/pixel_codes' , 'index');
+            Route::post('/pixel_codes/create' , 'create');
+            Route::post('/pixel_codes/{id}/edit' , 'edit');
+            Route::get('/pixel_codes/{id}/show' , 'show');
+            Route::get('/pixel_codes/{id}/delete' , 'destroy');
+        });
     });
 });
