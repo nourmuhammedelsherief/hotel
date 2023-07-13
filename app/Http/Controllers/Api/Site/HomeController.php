@@ -166,7 +166,7 @@ class HomeController extends Controller
         $hotel = Hotel::whereSubdomain($subdomain)->first();
         if ($hotel)
         {
-            $codes = HotelPixel::whereHotelId($hotel->id)->first();
+            $codes = HotelPixel::whereHotelId($hotel->id)->get();
             return ApiController::respondWithSuccess(HotelPixelResource::collection($codes));
         }else{
             $error = ['message' => trans('messages.not_found')];
