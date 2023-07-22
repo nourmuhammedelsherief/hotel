@@ -34,6 +34,7 @@ Route::group(['middleware' => ['cors', 'localization']], function () {
         Route::get('/{subdomain}/information_about_us' , 'information_about_us');
         Route::get('/{subdomain}/information_categories' , 'information_categories');
         Route::get('/{subdomain}/information_category_items/{id}' , 'information_category_items');
+        Route::get('/{subdomain}/show_information_category_item/{id}' , 'information_category_item');
     });
     Route::controller(HotelOurServiceController::class)->group(function (){
         Route::get('/{subdomain}/our_services' , 'our_services');

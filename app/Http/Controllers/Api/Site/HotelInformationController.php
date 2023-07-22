@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Site;
 
 use App\Http\Controllers\Api\ApiController;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Hotel\HotelInfoCategoryItemResource;
 use App\Http\Resources\Site\HotelInfoCategoryItemCollection;
 use App\Http\Resources\Site\HotelInfoCategoryResource;
 use App\Http\Resources\Site\HotelServiceResource;
@@ -67,6 +68,24 @@ class HotelInformationController extends Controller
             {
                 $items = HotelInformationCategoryItem::where('hotel_info_category_id',$category->id)->paginate();
                 return ApiController::respondWithSuccess(new HotelInfoCategoryItemCollection($items));
+            }else{
+                $error = ['message' => trans('messages.not_found')];
+                return ApiController::respondWithErrorNOTFoundObject($error);
+            }
+        }else{
+            $error = ['message' => trans('messages.not_found')];
+            return ApiController::respondWithErrorNOTFoundObject($error);
+        }
+    }
+    public function information_category_item($subdomain , $id)
+    {
+        $hotel = Hotel::whereSubdomain($subdomain)->first();
+        if ($hotel)
+        {
+            $item = HotelInformationCategoryItem::find($id);
+            if ($item)
+            {
+                return ApiController::respondWithSuccess(new HotelInfoCategoryItemResource($item));
             }else{
                 $error = ['message' => trans('messages.not_found')];
                 return ApiController::respondWithErrorNOTFoundObject($error);
