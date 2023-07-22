@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\Hotel\HotelInfoCategoryItemResource;
 use App\Http\Resources\Site\HotelInfoCategoryItemCollection;
 use App\Http\Resources\Site\HotelInfoCategoryResource;
+use App\Http\Resources\Site\HotelInfoCatItemResource;
 use App\Http\Resources\Site\HotelServiceResource;
 use App\Models\Hotel;
 use App\Models\Hotel\HotelInformation;
@@ -85,7 +86,7 @@ class HotelInformationController extends Controller
             $item = HotelInformationCategoryItem::find($id);
             if ($item)
             {
-                return ApiController::respondWithSuccess(new HotelInfoCategoryItemResource($item));
+                return ApiController::respondWithSuccess(new HotelInfoCatItemResource($item));
             }else{
                 $error = ['message' => trans('messages.not_found')];
                 return ApiController::respondWithErrorNOTFoundObject($error);
