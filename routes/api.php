@@ -40,10 +40,12 @@ Route::group(['middleware' => ['cors', 'localization']], function () {
         Route::get('/{subdomain}/our_services' , 'our_services');
         Route::get('/{subdomain}/our_services_categories' , 'our_services_categories');
         Route::get('/{subdomain}/our_services_category_items/{id}' , 'our_services_category_items');
+        Route::get('/{subdomain}/show_our_services_category_item/{id}' , 'show_our_services_category_item');
     });
     Route::controller(HotelNearServiceController::class)->group(function (){
         Route::get('/{subdomain}/near_services' , 'near_services');
         Route::get('/{subdomain}/near_services_categories' , 'near_services_categories');
         Route::get('/{subdomain}/near_services_category_items/{id}' , 'near_services_category_items');
+        Route::get('/{subdomain}/show_near_services_category_item/{id}' , 'show_near_services_category_item');
     });
 });

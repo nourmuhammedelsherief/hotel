@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\Hotel\HotelNearCategoryItemCollection;
 use App\Http\Resources\Site\HotelNearCategoryResource;
 use App\Http\Resources\Site\HotelServiceResource;
+use App\Http\Resources\Site\SiteNearCategoryItemResource;
 use App\Models\Hotel;
 use App\Models\Hotel\HotelNearService;
 use App\Models\Hotel\HotelNearServiceCategory;
@@ -67,6 +68,24 @@ class HotelNearServiceController extends Controller
             {
                 $items = HotelNearServiceCategoryItem::where('hotel_near_cat_id',$category->id)->paginate();
                 return ApiController::respondWithSuccess(new HotelNearCategoryItemCollection($items));
+            }else{
+                $error = ['message' => trans('messages.not_found')];
+                return ApiController::respondWithErrorNOTFoundObject($error);
+            }
+        }else{
+            $error = ['message' => trans('messages.not_found')];
+            return ApiController::respondWithErrorNOTFoundObject($error);
+        }
+    }
+    public function show_near_services_category_item($subdomain , $id)
+    {
+        $hotel = Hotel::whereSubdomain($subdomain)->first();
+        if ($hotel)
+        {
+            $item = HotelNearServiceCategoryItem::find($id);
+            if ($item)
+            {
+                return ApiController::respondWithSuccess(new SiteNearCategoryItemResource($item));
             }else{
                 $error = ['message' => trans('messages.not_found')];
                 return ApiController::respondWithErrorNOTFoundObject($error);

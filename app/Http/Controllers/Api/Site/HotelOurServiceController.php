@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\Site\HotelInfoCategoryItemCollection;
 use App\Http\Resources\Site\HotelServiceCategoryResource;
 use App\Http\Resources\Site\HotelServiceResource;
+use App\Http\Resources\Site\SiteInfoCategoryItemResource;
 use App\Models\Hotel;
 use App\Models\Hotel\HotelService;
 use App\Models\Hotel\HotelServiceCategory;
@@ -76,4 +77,23 @@ class HotelOurServiceController extends Controller
             return ApiController::respondWithErrorNOTFoundObject($error);
         }
     }
+    public function show_our_services_category_item($subdomain , $id)
+    {
+        $hotel = Hotel::whereSubdomain($subdomain)->first();
+        if ($hotel)
+        {
+            $item = HotelServiceCategoryItem::find($id);
+            if ($item)
+            {
+                return ApiController::respondWithSuccess(new SiteInfoCategoryItemResource($item));
+            }else{
+                $error = ['message' => trans('messages.not_found')];
+                return ApiController::respondWithErrorNOTFoundObject($error);
+            }
+        }else{
+            $error = ['message' => trans('messages.not_found')];
+            return ApiController::respondWithErrorNOTFoundObject($error);
+        }
+    }
+
 }
