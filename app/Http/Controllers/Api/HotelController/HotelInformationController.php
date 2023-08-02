@@ -14,6 +14,7 @@ class HotelInformationController extends Controller
     public function show(Request $request)
     {
         $hotel = $request->user();
+        dd($hotel);
         $info = HotelInformation::whereHotelId($hotel->id)->first();
         if ($info == null)
         {
