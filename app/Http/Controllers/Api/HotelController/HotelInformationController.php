@@ -29,9 +29,10 @@ class HotelInformationController extends Controller
         }
         return ApiController::respondWithSuccess(new HotelInformationResource($info));
     }
-    public function edit(Request $request , $id)
+    public function edit(Request $request)
     {
-        $info = HotelInformation::find($id);
+        $hotel = $request->user();
+        $info = HotelInformation::whereHotelId($hotel->id)->first();
         if ($info)
         {
             $rules = [
