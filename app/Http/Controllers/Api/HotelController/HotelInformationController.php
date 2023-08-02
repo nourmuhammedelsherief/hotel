@@ -27,6 +27,7 @@ class HotelInformationController extends Controller
                 'icon'           => 'icon.png'
             ]);
         }
+        dd($info);
         return ApiController::respondWithSuccess(new HotelInformationResource($info));
     }
     public function edit(Request $request , $id)
