@@ -29,9 +29,10 @@ class HotelNearServiceController extends Controller
         }
         return ApiController::respondWithSuccess(new HotelNearServiceResource($service));
     }
-    public function edit(Request $request , $id)
+    public function edit(Request $request)
     {
-        $service = HotelNearService::find($id);
+        $hotel = $request->user();
+        $service = HotelNearService::whereHotelId($hotel->id)->first();
         if ($service)
         {
             $rules = [

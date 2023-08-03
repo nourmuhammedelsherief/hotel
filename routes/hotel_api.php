@@ -154,7 +154,7 @@ Route::group(['middleware' => ['auth:hotel-api', 'cors', 'localization']], funct
         // hotel near services routes
         Route::controller(HotelNearServiceController::class)->group(function (){
             Route::get('/near_services' , 'show');
-            Route::post('/near_services/{id}/edit' , 'edit');
+            Route::post('/near_services/edit' , 'edit');
         });
         Route::controller(HotelNearServiceCategoryController::class)->group(function (){
             Route::get('/near_service_categories' , 'index');
