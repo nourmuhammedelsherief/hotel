@@ -29,7 +29,7 @@ class HotelServiceController extends Controller
         }
         return ApiController::respondWithSuccess(new HotelServiceResource($service));
     }
-    public function edit(Request $request , $id)
+    public function edit(Request $request)
     {
         $hotel = $request->user();
         $service = HotelService::whereHotelId($hotel->id)->first();
