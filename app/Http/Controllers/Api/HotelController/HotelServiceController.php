@@ -31,7 +31,8 @@ class HotelServiceController extends Controller
     }
     public function edit(Request $request , $id)
     {
-        $service = HotelService::find($id);
+        $hotel = $request->user();
+        $service = HotelService::whereHotelId($hotel->id)->first();
         if ($service)
         {
             $rules = [

@@ -133,7 +133,7 @@ Route::group(['middleware' => ['auth:hotel-api', 'cors', 'localization']], funct
         // hotel services routes
         Route::controller(HotelServiceController::class)->group(function (){
             Route::get('/our_services' , 'show');
-            Route::post('/our_services/{id}/edit' , 'edit');
+            Route::post('/our_services/edit' , 'edit');
         });
         Route::controller(HotelServiceCategoryController::class)->group(function (){
             Route::get('/service_categories' , 'index');
