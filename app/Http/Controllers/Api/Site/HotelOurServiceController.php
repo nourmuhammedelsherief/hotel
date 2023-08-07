@@ -4,11 +4,13 @@ namespace App\Http\Controllers\Api\Site;
 
 use App\Http\Controllers\Api\ApiController;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Hotel\HotelServiceCategoryCollection;
 use App\Http\Resources\Hotel\HotelServiceCategoryItemCollection;
 use App\Http\Resources\Site\HotelInfoCategoryItemCollection;
 use App\Http\Resources\Site\HotelServiceCategoryResource;
 use App\Http\Resources\Site\HotelServiceResource;
 use App\Http\Resources\Site\SiteInfoCategoryItemResource;
+use App\Http\Resources\Site\SiteOurServiceCategoryResource;
 use App\Models\Hotel;
 use App\Models\Hotel\HotelService;
 use App\Models\Hotel\HotelServiceCategory;
@@ -86,7 +88,7 @@ class HotelOurServiceController extends Controller
             $item = HotelServiceCategoryItem::find($id);
             if ($item)
             {
-                return ApiController::respondWithSuccess(new SiteInfoCategoryItemResource($item));
+                return ApiController::respondWithSuccess(new SiteOurServiceCategoryResource($item));
             }else{
                 $error = ['message' => trans('messages.not_found')];
                 return ApiController::respondWithErrorNOTFoundObject($error);
