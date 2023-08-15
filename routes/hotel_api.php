@@ -91,6 +91,8 @@ Route::group(['middleware' => ['auth:hotel-api', 'cors', 'localization']], funct
             Route::get('/gallery/categories/{id}/delete' , 'destroy');
         });
         Route::controller(GalleryController::class)->group(function (){
+            Route::get('/get_hotel_gallery_info' , 'get_hotel_gallery_info');
+            Route::post('/edit_hotel_gallery_info' , 'edit_hotel_gallery_info');
             Route::get('/galleries' , 'index');
             Route::post('/galleries/create' , 'create');
             Route::post('/galleries/{id}/edit' , 'edit');

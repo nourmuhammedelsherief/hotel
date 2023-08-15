@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Site;
 use App\Http\Controllers\Api\ApiController;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Hotel\HotelContactResource;
+use App\Http\Resources\Hotel\HotelGalleryCategoryCollection;
 use App\Http\Resources\Hotel\HotelGalleryCollection;
 use App\Http\Resources\Hotel\HotelLocationCollection;
 use App\Http\Resources\Hotel\HotelPixelResource;
@@ -12,8 +13,12 @@ use App\Http\Resources\Hotel\HotelRateBranchCollection;
 use App\Http\Resources\Hotel\HotelReservationCollection;
 use App\Http\Resources\Hotel\HotelSliderResource;
 use App\Http\Resources\Hotel\SiteHotelResource;
+use App\Http\Resources\Site\SitePhotoGalleryIconResource;
 use App\Models\Hotel;
 use App\Models\Hotel\HotelRate;
+use App\Models\Hotel\HotelGallery;
+use App\Models\Hotel\HotelGalleryIcon;
+use App\Models\Hotel\HotelGalleryCategory;
 use App\Models\Hotel\HotelContact;
 use App\Models\HotelSlider;
 use App\Models\Hotel\HotelPixel;
@@ -75,13 +80,49 @@ class HomeController extends Controller
             return ApiController::respondWithErrorNOTFoundObject($error);
         }
     }
-    public function photos($subdomain)
+    public function gallery($subdomain)
     {
         $hotel = Hotel::whereSubdomain($subdomain)->first();
         if ($hotel)
         {
-            $locations = $hotel->photos()->paginate();
-            return ApiController::respondWithSuccess(new HotelGalleryCollection($locations));
+            $gallery_icon = HotelGalleryIcon::whereHotelId($hotel->id)->first();
+            if ($gallery_icon == null)
+            {
+                // create new gallery icon
+                $gallery_icon = HotelGalleryIcon::create([
+                    'hotel_id'  => $hotel->id,
+                    'name_ar'   => 'معرض الصور',
+                    'name_en'   => 'photo gallery',
+                    'icon'      => 'photo_icon.png'
+                ]);
+            }
+            return ApiController::respondWithSuccess(new SitePhotoGalleryIconResource($gallery_icon));
+        }else{
+            $error = ['message' => trans('messages.not_found')];
+            return ApiController::respondWithErrorNOTFoundObject($error);
+        }
+    }
+    public function gallery_categories($subdomain)
+    {
+        $hotel = Hotel::whereSubdomain($subdomain)->first();
+        if ($hotel)
+        {
+            $categories = HotelGalleryCategory::whereHotelId($hotel->id)->paginate();
+            return ApiController::respondWithSuccess(new HotelGalleryCategoryCollection($categories));
+        }else{
+            $error = ['message' => trans('messages.not_found')];
+            return ApiController::respondWithErrorNOTFoundObject($error);
+        }
+    }
+    public function photos($subdomain , $id)
+    {
+        $hotel = Hotel::whereSubdomain($subdomain)->first();
+        if ($hotel)
+        {
+            $photos = HotelGallery::whereHotelId($hotel->id)
+                ->where('gallery_category_id' , $id)
+                ->paginate();
+            return ApiController::respondWithSuccess(new HotelGalleryCollection($photos));
         }else{
             $error = ['message' => trans('messages.not_found')];
             return ApiController::respondWithErrorNOTFoundObject($error);

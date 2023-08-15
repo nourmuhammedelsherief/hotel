@@ -6,12 +6,56 @@ use App\Http\Controllers\Api\ApiController;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Hotel\HotelGalleryCollection;
 use App\Http\Resources\Hotel\HotelGalleryResource;
+use App\Http\Resources\Hotel\PhotoGalleryIconResource;
 use App\Models\Hotel\HotelGallery;
+use App\Models\Hotel\HotelGalleryIcon;
 use Illuminate\Http\Request;
 use Validator;
 
 class GalleryController extends Controller
 {
+    public function get_hotel_gallery_info(Request $request)
+    {
+        $hotel = $request->user();
+        $gallery_icon = HotelGalleryIcon::whereHotelId($hotel->id)->first();
+        if ($gallery_icon == null)
+        {
+            // create new gallery icon
+            $gallery_icon = HotelGalleryIcon::create([
+                    'hotel_id'  => $hotel->id,
+                    'name_ar'   => 'معرض الصور',
+                    'name_en'   => 'photo gallery',
+                    'icon'      => 'photo_icon.png'
+                ]);
+        }
+        return ApiController::respondWithSuccess(new PhotoGalleryIconResource($gallery_icon));
+    }
+    public function edit_hotel_gallery_info(Request $request)
+    {
+        $hotel = $request->user();
+        $gallery_icon = HotelGalleryIcon::whereHotelId($hotel->id)->first();
+        if ($gallery_icon)
+        {
+            $rules = [
+                'name_ar'   => 'nullable|string|max:191',
+                'name_en'   => 'nullable|string|max:191',
+                'icon'           => 'nullable|mimes:jpg,jpeg,png,gif,tif,webp,psd,pmp|max:5000'
+            ];
+            $validator = Validator::make($request->all(), $rules);
+            if ($validator->fails())
+                return ApiController::respondWithErrorArray(validateRules($validator->errors(), $rules));
+
+            $gallery_icon->update([
+                'name_ar'  => $request->name_ar == null ? $gallery_icon->name_ar : $request->name_ar,
+                'name_en'  => $request->name_en == null ? $gallery_icon->name_en : $request->name_en,
+                'icon'  => $request->file('icon') == null ? $gallery_icon->icon : ($gallery_icon->icon == 'photo_icon.png' ? UploadImage($request->file('icon') , 'icon' , '/uploads/icons') : UploadImageEdit($request->file('icon') , 'icon' , '/uploads/icons' , $gallery_icon->icon))
+            ]);
+            return ApiController::respondWithSuccess(new PhotoGalleryIconResource($gallery_icon));
+        }else{
+            $error = ['message' => trans('messages.not_found')];
+            return ApiController::respondWithErrorNOTFoundObject($error);
+        }
+    }
     public function index(Request $request)
     {
         $hotel = $request->user();

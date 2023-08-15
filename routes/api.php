@@ -23,8 +23,9 @@ Route::group(['middleware' => ['cors', 'localization']], function () {
         Route::get('/{subdomain}/sliders' , 'sliders');
         Route::get('/{subdomain}/reservations' , 'reservations');
         Route::get('/{subdomain}/locations' , 'locations');
-        Route::get('/{subdomain}/galleries' , 'photos');
-        Route::get('/{subdomain}/galleries' , 'photos');
+        Route::get('/{subdomain}/gallery' , 'gallery');
+        Route::get('/{subdomain}/gallery_categories' , 'gallery_categories');
+        Route::get('/{subdomain}/category/{id}/galleries' , 'photos');
         Route::get('/{subdomain}/rate_branches' , 'rate_branches');
         Route::post('/{subdomain}/rate_hotel' , 'rate_hotel');
         Route::get('/{subdomain}/contact_us' , 'contact_us');
