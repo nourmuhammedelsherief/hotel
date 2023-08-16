@@ -14,6 +14,7 @@ class HotelGalleryCategory extends Model
         'hotel_id',
         'name_ar',
         'name_en',
+        'icon',
     ];
 
     public function hotel()

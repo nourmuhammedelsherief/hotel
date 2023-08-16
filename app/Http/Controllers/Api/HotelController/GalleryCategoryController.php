@@ -26,6 +26,7 @@ class GalleryCategoryController extends Controller
         $rules = [
             'name_ar'  => 'required|string|max:191',
             'name_en'  => 'required|string|max:191',
+            'icon'     => 'required|mimes:jpg,jpeg,png,gif,tif,psd,pmp,webp|max:5000',
         ];
         $validator = Validator::make($request->all(), $rules);
         if ($validator->fails())
@@ -36,6 +37,7 @@ class GalleryCategoryController extends Controller
             'hotel_id'  => $hotel->id,
             'name_ar'   => $request->name_ar,
             'name_en'   => $request->name_en,
+            'icon'      => UploadImage($request->file('icon') , 'icon' , '/uploads/gallery_category_icons')
         ]);
         return ApiController::respondWithSuccess(new HotelGalleryCategoryResource($category));
     }
@@ -48,6 +50,7 @@ class GalleryCategoryController extends Controller
             $rules = [
                 'name_ar'  => 'nullable|string|max:191',
                 'name_en'  => 'nullable|string|max:191',
+                'icon'     => 'nullable|mimes:jpg,jpeg,png,gif,tif,psd,bmp,webp|max:5000'
             ];
             $validator = Validator::make($request->all(), $rules);
             if ($validator->fails())
@@ -57,6 +60,7 @@ class GalleryCategoryController extends Controller
             $category->update([
                 'name_ar'   => $request->name_ar == null ? $category->name_ar : $request->name_ar,
                 'name_en'   => $request->name_en == null ? $category->name_en : $request->name_en ,
+                'icon'      => $request->file('icon') == null ? $category->icon : UploadImageEdit($request->file('icon') , 'icon' , '/uploads/gallery_category_icons' , $category->icon)
             ]);
             return ApiController::respondWithSuccess(new HotelGalleryCategoryResource($category));
         }else{
@@ -80,6 +84,10 @@ class GalleryCategoryController extends Controller
         $category = HotelGalleryCategory::find($id);
         if ($category)
         {
+            if ($category->icon != null)
+            {
+                @unlink(public_path('/uploads/gallery_category_icons/'.$category->icon));
+            }
             $category->delete();
             $success = [
                 'message' => trans('messages.deleted')

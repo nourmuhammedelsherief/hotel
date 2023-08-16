@@ -19,6 +19,7 @@ class HotelGalleryCategoryResource extends JsonResource
             'hotel_id' => $this->hotel_id,
             'name_ar'  => $this->name_ar,
             'name_en'  => $this->name_en,
+            'icon'     => $this->icon != null ? asset('/uploads/gallery_category_icons/'.$this->icon) : null,
             'created_at' => $this->created_at->format('Y-m-d')
         ];
     }

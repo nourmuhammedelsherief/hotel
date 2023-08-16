@@ -21,6 +21,7 @@ class HotelGalleryCategoryCollection extends ResourceCollection
                     'id'       => $query->id,
                     'hotel_id' => $query->hotel_id,
                     'name'     => app()->getLocale() == 'ar' ? $query->name_ar : $query->name_en,
+                    'icon'     => $query->icon != null ? asset('/uploads/gallery_category_icons/'.$query->icon) : null,
                     'created_at' => $query->created_at->format('Y-m-d')
                 ];
             }),
