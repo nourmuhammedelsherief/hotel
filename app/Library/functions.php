@@ -10,7 +10,7 @@ use App\Models\Setting;
 
 function domain()
 {
-    return 'localhost:8000';
+    return 'easyhotelll.com';
 }
 
 function validateRules($errors, $rules)
