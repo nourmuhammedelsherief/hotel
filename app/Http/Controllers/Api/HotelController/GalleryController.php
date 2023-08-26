@@ -39,7 +39,7 @@ class GalleryController extends Controller
             $rules = [
                 'name_ar'   => 'nullable|string|max:191',
                 'name_en'   => 'nullable|string|max:191',
-                'icon'           => 'nullable|mimes:jpg,jpeg,png,gif,tif,webp,psd,pmp|max:5000'
+                'photo'     => 'nullable|mimes:jpg,jpeg,png,gif,tif,webp,psd,pmp|max:5000'
             ];
             $validator = Validator::make($request->all(), $rules);
             if ($validator->fails())
@@ -48,7 +48,7 @@ class GalleryController extends Controller
             $gallery_icon->update([
                 'name_ar'  => $request->name_ar == null ? $gallery_icon->name_ar : $request->name_ar,
                 'name_en'  => $request->name_en == null ? $gallery_icon->name_en : $request->name_en,
-                'icon'  => $request->file('icon') == null ? $gallery_icon->icon : ($gallery_icon->icon == 'photo_icon.png' ? UploadImage($request->file('icon') , 'icon' , '/uploads/icons') : UploadImageEdit($request->file('icon') , 'icon' , '/uploads/icons' , $gallery_icon->icon))
+                'icon'  => $request->file('photo') == null ? $gallery_icon->icon : ($gallery_icon->icon == 'photo_icon.png' ? UploadImage($request->file('photo') , 'icon' , '/uploads/icons') : UploadImageEdit($request->file('photo') , 'icon' , '/uploads/icons' , $gallery_icon->icon))
             ]);
             return ApiController::respondWithSuccess(new PhotoGalleryIconResource($gallery_icon));
         }else{

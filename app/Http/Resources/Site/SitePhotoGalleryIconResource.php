@@ -18,7 +18,7 @@ class SitePhotoGalleryIconResource extends JsonResource
             'id'    => $this->id,
             'hotel_id' => $this->hotel_id,
             'name' => app()->getLocale() == 'ar' ? $this->name_ar : $this->name_en,
-            'icon'    => $this->icon == null ? null : asset('/uploads/icons/'.$this->icon),
+            'photo'  => $this->icon == null ? null : asset('/uploads/icons/'.$this->icon),
         ];
     }
 }

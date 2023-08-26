@@ -19,7 +19,7 @@ class PhotoGalleryIconResource extends JsonResource
             'hotel_id' => $this->hotel_id,
             'name_ar' => $this->name_ar,
             'name_en' => $this->name_en,
-            'icon'    => $this->icon == null ? null : asset('/uploads/icons/'.$this->icon),
+            'photo'   => $this->icon == null ? null : asset('/uploads/icons/'.$this->icon),
         ];
     }
 }
