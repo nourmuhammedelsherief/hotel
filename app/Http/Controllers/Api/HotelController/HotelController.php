@@ -4,9 +4,12 @@ namespace App\Http\Controllers\Api\HotelController;
 
 use App\Http\Controllers\Api\ApiController;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Admin\BankCollection;
+use App\Http\Resources\Admin\BankResource;
 use App\Http\Resources\Admin\CityResource;
 use App\Http\Resources\Admin\CountryResource;
 use App\Http\Resources\Admin\HotelResource;
+use App\Models\Bank;
 use App\Models\City;
 use App\Models\Country;
 use App\Models\Hotel;
@@ -109,6 +112,11 @@ class HotelController extends Controller
     {
         $cities = City::whereCountryId($id)->orderBy('id' , 'desc')->get();
         return ApiController::respondWithSuccess(CityResource::collection($cities));
+    }
+    public function banks()
+    {
+        $banks = Bank::all();
+        return ApiController::respondWithSuccess(BankResource::collection($banks));
     }
 }
 
