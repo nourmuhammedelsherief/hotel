@@ -26,4 +26,6 @@ return [
     'hotelRatedSuccessfully' => 'Hotel Rated Successfully',
     'hotelInComplete' => 'Sorry You Can\'t Login Until the Management Complete Your Data',
     'hotelWaitAdminActivation' => 'Your Account Is Waiting Admin Activation',
+    'hotelSubscriptionFinished' => 'Hotel Subscription Finished',
+    'hotelSubscriptionTentativeFinished' => 'Hotel Tentative Subscription Finished',
 ];

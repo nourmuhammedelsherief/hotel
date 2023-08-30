@@ -24,6 +24,8 @@ return [
     'paymentDoneSuccessfully' => 'تمت عملية الدفع بنجاح',
     'paymentCanceledSuccessfully' => 'تم إلغاء العملية بنجاح',
     'hotelRatedSuccessfully' => 'تم تقييم الفندق بنجاح',
-    'hotelInComplete' => 'عفوا لن يمكنك الدخول الي لوحة الفندق حتي يتم أكمال تسجيل بياناتك من قبل الإدارة',
-    'hotelWaitAdminActivation' => 'بانتظار تفعيل الحساب الخاص بك من قبل  الإدارة',
+    'hotelInComplete' => 'بانتظار تأكيد بياناتك من قبل  الإدارة',
+    'hotelWaitAdminActivation' => 'بانتظار تفعيل الحساب بالفندق من قبل  الإدارة',
+    'hotelSubscriptionFinished' => 'تم أنتهاء أشتراك الفندق',
+    'hotelSubscriptionTentativeFinished' => 'تم أنتهاء الفترة التجريبية للفندق',
 ];

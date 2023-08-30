@@ -32,6 +32,31 @@ class HomeController extends Controller
         $hotel = Hotel::whereSubdomain($subdomain)->first();
         if ($hotel)
         {
+            if ($hotel->status == 'tentative_finished')
+            {
+                $errors = [
+                    'message' => trans('messages.hotelSubscriptionTentativeFinished'),
+                ];
+                return ApiController::respondWithErrorObject(array($errors));
+            }elseif ($hotel->status == 'finished')
+            {
+                $errors = [
+                    'message' => trans('messages.hotelSubscriptionFinished'),
+                ];
+                return ApiController::respondWithErrorObject(array($errors));
+            }elseif ($hotel->status == 'in_complete')
+            {
+                $errors = [
+                    'message' => trans('messages.hotelInComplete'),
+                ];
+                return ApiController::respondWithErrorObject(array($errors));
+            }elseif ($hotel->admin_activation == 'false')
+            {
+                $errors = [
+                    'message' => trans('messages.hotelWaitAdminActivation'),
+                ];
+                return ApiController::respondWithErrorObject(array($errors));
+            }
             return ApiController::respondWithSuccess(new SiteHotelResource($hotel));
         }else{
             $error = ['message' => trans('messages.not_found')];
