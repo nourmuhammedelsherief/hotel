@@ -100,6 +100,8 @@ Route::group(['middleware' => ['auth:admin-api', 'cors', 'localization']], funct
         Route::controller(SettingController::class)->group(function () {
             Route::get('settings', 'settings');
             Route::post('settings/edit', 'edit_setting');
+            Route::get('subscription_info', 'subscription_info');
+            Route::post('subscription_info/edit', 'edit_subscription_info');
         });
         Route::controller(OperationController::class)->group(function (){
             Route::get('hotel_bank_transfers' , 'hotel_bank_transfers');

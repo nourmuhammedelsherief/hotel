@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Api\AdminController;
 
 use App\Http\Controllers\Api\ApiController;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Admin\PackageResource;
 use App\Http\Resources\Admin\SettingResource;
+use App\Models\Package;
 use App\Models\Setting;
 use Illuminate\Http\Request;
 use Validator;
@@ -47,4 +49,29 @@ class SettingController extends Controller
         return ApiController::respondWithSuccess(new SettingResource($setting));
     }
 
+    public function subscription_info()
+    {
+        $package = Package::first();
+        if ($package)
+        {
+            return ApiController::respondWithSuccess(new PackageResource($package));
+        }
+    }
+    public function edit_subscription_info(Request $request)
+    {
+        $rules = [
+            'price'    => 'sometimes',
+            'duration' => 'sometimes',
+        ];
+        $validator = Validator::make($request->all(), $rules);
+        if ($validator->fails())
+            return ApiController::respondWithErrorArray(validateRules($validator->errors(), $rules));
+
+        $package = Package::first();
+        $package->update([
+            'price' => $request->price == null ? $package->price : $request->price,
+            'duration' => $request->duration == null ? $package->duration : $request->duration,
+        ]);
+        return ApiController::respondWithSuccess(new PackageResource($package));
+    }
 }
