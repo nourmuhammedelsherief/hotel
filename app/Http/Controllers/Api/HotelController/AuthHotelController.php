@@ -162,6 +162,13 @@ class AuthHotelController extends Controller
 
         $hotel = Hotel::whereEmail($request->email)->first();
         if (auth()->guard('hotel')->attempt(['email' => $request->email, 'password' => $request->password])) {
+            if ($hotel->status == 'in_complete')
+            {
+                $errors = [
+                    'message' => trans('messages.hotelInComplete'),
+                ];
+                return ApiController::respondWithErrorObject(array($errors));
+            }
             $hotel->update([
                 'api_token' => generateApiToken($hotel->id, 50),
             ]);

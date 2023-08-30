@@ -24,4 +24,5 @@ return [
     'paymentDoneSuccessfully' => 'تمت عملية الدفع بنجاح',
     'paymentCanceledSuccessfully' => 'تم إلغاء العملية بنجاح',
     'hotelRatedSuccessfully' => 'تم تقييم الفندق بنجاح',
+    'hotelInComplete' => 'عفوا لن يمكنك الدخول الي لوحة الفندق حتي يتم أكمال تسجيل بياناتك من قبل الإدارة',
 ];
