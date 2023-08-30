@@ -16,7 +16,7 @@ class PackageResource extends JsonResource
     {
         return [
             'id'       => $this->id,
-            'price'    => $this->price,
+            'price'    => doubleval($this->price),
             'duration' => $this->duration,
         ];
     }
