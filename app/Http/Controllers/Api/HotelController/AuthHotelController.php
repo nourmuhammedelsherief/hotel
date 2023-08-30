@@ -171,6 +171,7 @@ class AuthHotelController extends Controller
             }
             if ($hotel->admin_activation == 'false')
             {
+                dd($hotel->admin_activation);
                 $errors = [
                     'message' => trans('messages.hotelWaitAdminActivation'),
                 ];
