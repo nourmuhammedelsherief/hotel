@@ -113,9 +113,10 @@ class HotelController extends Controller
         $cities = City::whereCountryId($id)->orderBy('id' , 'desc')->get();
         return ApiController::respondWithSuccess(CityResource::collection($cities));
     }
-    public function banks()
+    public function banks(Request $request)
     {
-        $banks = Bank::all();
+        $hotel = $request->user();
+        $banks = Bank::whereCountryId($hotel->country_id)->get();
         return ApiController::respondWithSuccess(BankResource::collection($banks));
     }
 }
