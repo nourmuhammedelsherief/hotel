@@ -49,6 +49,9 @@ Route::middleware(['cors', 'localization'])->group(function () {
     });
 });
 Route::group(['middleware' => ['auth:hotel-api', 'cors', 'localization']], function () {
+    Route::controller(HotelController::class)->group(function () {
+        Route::get('/banks' , 'banks');
+    });
     Route::prefix('dashboard')->group(function () {
         Route::controller(HotelController::class)->group(function () {
             Route::get('/profile', 'profile');
@@ -56,7 +59,6 @@ Route::group(['middleware' => ['auth:hotel-api', 'cors', 'localization']], funct
             Route::post('/change_password', 'changePassword');
             Route::post('/edit_account', 'edit_account');
             Route::post('/logout', 'logout');
-            Route::get('/banks' , 'banks');
         });
 
         Route::controller(SubscriptionController::class)->group(function (){
