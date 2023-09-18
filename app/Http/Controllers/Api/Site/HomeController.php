@@ -30,6 +30,7 @@ class HomeController extends Controller
     public function index($subdomain)
     {
         $hotel = Hotel::whereSubdomain($subdomain)->first();
+        app()->setLocale($hotel->lang == 'both' ? 'ar' : $hotel->lang);
         if ($hotel)
         {
             if ($hotel->status == 'tentative_finished')
@@ -57,6 +58,7 @@ class HomeController extends Controller
                 ];
                 return ApiController::respondWithErrorObject(array($errors));
             }
+
             return ApiController::respondWithSuccess(new SiteHotelResource($hotel));
         }else{
             $error = ['message' => trans('messages.not_found')];
