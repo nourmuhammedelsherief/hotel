@@ -232,4 +232,12 @@ class SubscriptionController extends Controller
             return ApiController::respondWithErrorObject($error);
         }
     }
+    public function subscribe_price(Request $request)
+    {
+        $package_price = Package::find(1)->price;
+        $success = [
+            'subscribe_price' => $package_price
+        ];
+        return ApiController::respondWithSuccess($success);
+    }
 }

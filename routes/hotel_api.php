@@ -60,6 +60,7 @@ Route::group(['middleware' => ['auth:hotel-api', 'cors', 'localization']], funct
         });
 
         Route::controller(SubscriptionController::class)->group(function (){
+            Route::get('subscribe_price' , 'subscribe_price');
             Route::post('subscribe' , 'store_subscription');
         });
         Route::controller(SliderController::class)->group(function (){
