@@ -27,32 +27,29 @@ use Validator;
 
 class HomeController extends Controller
 {
-    public function index($subdomain)
+    public function index(Request $request, $subdomain)
     {
         $hotel = Hotel::whereSubdomain($subdomain)->first();
-        app()->setLocale($hotel->lang == 'both' ? 'ar' : $hotel->lang);
-        if ($hotel)
-        {
-            if ($hotel->status == 'tentative_finished')
-            {
+        if ($request->hasHeader("Accept-Language") == null):
+            app()->setLocale($hotel->lang == 'both' ? 'ar' : $hotel->lang);
+        endif;
+        if ($hotel) {
+            if ($hotel->status == 'tentative_finished') {
                 $errors = [
                     'message' => trans('messages.hotelSubscriptionTentativeFinished'),
                 ];
                 return ApiController::respondWithErrorObject(array($errors));
-            }elseif ($hotel->status == 'finished')
-            {
+            } elseif ($hotel->status == 'finished') {
                 $errors = [
                     'message' => trans('messages.hotelSubscriptionFinished'),
                 ];
                 return ApiController::respondWithErrorObject(array($errors));
-            }elseif ($hotel->status == 'in_complete')
-            {
+            } elseif ($hotel->status == 'in_complete') {
                 $errors = [
                     'message' => trans('messages.hotelInComplete'),
                 ];
                 return ApiController::respondWithErrorObject(array($errors));
-            }elseif ($hotel->admin_activation == 'false')
-            {
+            } elseif ($hotel->admin_activation == 'false') {
                 $errors = [
                     'message' => trans('messages.hotelWaitAdminActivation'),
                 ];
@@ -60,129 +57,127 @@ class HomeController extends Controller
             }
 
             return ApiController::respondWithSuccess(new SiteHotelResource($hotel));
-        }else{
+        } else {
             $error = ['message' => trans('messages.not_found')];
             return ApiController::respondWithErrorNOTFoundObject($error);
         }
     }
+
     public function sliders($subdomain)
     {
         $hotel = Hotel::whereSubdomain($subdomain)->first();
-        if ($hotel)
-        {
-            $slider = HotelSlider::whereHotelId($hotel->id)->orderBy('id' , 'desc')->first();
-            if ($slider)
-            {
+        if ($hotel) {
+            $slider = HotelSlider::whereHotelId($hotel->id)->orderBy('id', 'desc')->first();
+            if ($slider) {
                 return ApiController::respondWithSuccess(new HotelSliderResource($slider));
-            }else{
+            } else {
                 $error = ['message' => trans('messages.not_found')];
                 return ApiController::respondWithErrorNOTFoundObject($error);
             }
-        }else{
+        } else {
             $error = ['message' => trans('messages.not_found')];
             return ApiController::respondWithErrorNOTFoundObject($error);
         }
     }
+
     public function reservations($subdomain)
     {
         $hotel = Hotel::whereSubdomain($subdomain)->first();
-        if ($hotel)
-        {
+        if ($hotel) {
             $reservations = $hotel->reservations()->paginate();
             return ApiController::respondWithSuccess(new HotelReservationCollection($reservations));
-        }else{
+        } else {
             $error = ['message' => trans('messages.not_found')];
             return ApiController::respondWithErrorNOTFoundObject($error);
         }
     }
+
     public function locations($subdomain)
     {
         $hotel = Hotel::whereSubdomain($subdomain)->first();
-        if ($hotel)
-        {
+        if ($hotel) {
             $locations = $hotel->locations()->paginate();
             return ApiController::respondWithSuccess(new HotelLocationCollection($locations));
-        }else{
+        } else {
             $error = ['message' => trans('messages.not_found')];
             return ApiController::respondWithErrorNOTFoundObject($error);
         }
     }
+
     public function gallery($subdomain)
     {
         $hotel = Hotel::whereSubdomain($subdomain)->first();
-        if ($hotel)
-        {
+        if ($hotel) {
             $gallery_icon = HotelGalleryIcon::whereHotelId($hotel->id)->first();
-            if ($gallery_icon == null)
-            {
+            if ($gallery_icon == null) {
                 // create new gallery icon
                 $gallery_icon = HotelGalleryIcon::create([
-                    'hotel_id'  => $hotel->id,
-                    'name_ar'   => 'معرض الصور',
-                    'name_en'   => 'photo gallery',
-                    'icon'      => 'photo_icon.png'
+                    'hotel_id' => $hotel->id,
+                    'name_ar' => 'معرض الصور',
+                    'name_en' => 'photo gallery',
+                    'icon' => 'photo_icon.png'
                 ]);
             }
             return ApiController::respondWithSuccess(new SitePhotoGalleryIconResource($gallery_icon));
-        }else{
+        } else {
             $error = ['message' => trans('messages.not_found')];
             return ApiController::respondWithErrorNOTFoundObject($error);
         }
     }
+
     public function gallery_categories($subdomain)
     {
         $hotel = Hotel::whereSubdomain($subdomain)->first();
-        if ($hotel)
-        {
+        if ($hotel) {
             $categories = HotelGalleryCategory::whereHotelId($hotel->id)->paginate();
             return ApiController::respondWithSuccess(new HotelGalleryCategoryCollection($categories));
-        }else{
+        } else {
             $error = ['message' => trans('messages.not_found')];
             return ApiController::respondWithErrorNOTFoundObject($error);
         }
     }
-    public function photos($subdomain , $id)
+
+    public function photos($subdomain, $id)
     {
         $hotel = Hotel::whereSubdomain($subdomain)->first();
-        if ($hotel)
-        {
+        if ($hotel) {
             $photos = HotelGallery::whereHotelId($hotel->id)
-                ->where('gallery_category_id' , $id)
+                ->where('gallery_category_id', $id)
                 ->paginate();
             return ApiController::respondWithSuccess(new HotelGalleryCollection($photos));
-        }else{
+        } else {
             $error = ['message' => trans('messages.not_found')];
             return ApiController::respondWithErrorNOTFoundObject($error);
         }
     }
+
     public function rate_branches($subdomain)
     {
         $hotel = Hotel::whereSubdomain($subdomain)->first();
-        if ($hotel)
-        {
+        if ($hotel) {
             $branches = $hotel->rate_branches()->paginate();
             return ApiController::respondWithSuccess(new HotelRateBranchCollection($branches));
-        }else{
+        } else {
             $error = ['message' => trans('messages.not_found')];
             return ApiController::respondWithErrorNOTFoundObject($error);
         }
     }
-    public function rate_hotel(Request $request , $subdomain)
+
+    public function rate_hotel(Request $request, $subdomain)
     {
         $hotel = Hotel::whereSubdomain($subdomain)->first();
-        if ($hotel)
-        {
+        if ($hotel) {
             $rules = [
-                'rate_branch_id'  => 'required|exists:hotel_rate_branches,id',
-                'name'            => 'required|string|max:191',
-                'phone_number'    => 'required|min:8',
-                'message'         => 'required|string',
-                'food'            => 'required|in:1,2,3,4,5',
-                'place'           => 'required|in:1,2,3,4,5',
-                'service'         => 'required|in:1,2,3,4,5',
-                'reception'       => 'required|in:1,2,3,4,5',
-                'speed'           => 'required|in:1,2,3,4,5',
-                'staff'           => 'required|in:1,2,3,4,5',
+                'rate_branch_id' => 'required|exists:hotel_rate_branches,id',
+                'name' => 'required|string|max:191',
+                'phone_number' => 'required|min:8',
+                'message' => 'required|string',
+                'food' => 'required|in:1,2,3,4,5',
+                'place' => 'required|in:1,2,3,4,5',
+                'service' => 'required|in:1,2,3,4,5',
+                'reception' => 'required|in:1,2,3,4,5',
+                'speed' => 'required|in:1,2,3,4,5',
+                'staff' => 'required|in:1,2,3,4,5',
             ];
             $validator = Validator::make($request->all(), $rules);
             if ($validator->fails())
@@ -190,53 +185,52 @@ class HomeController extends Controller
 
             // create new rate
             $rate = HotelRate::create([
-                'hotel_id'        => $hotel->id,
-                'rate_branch_id'  => $request->rate_branch_id,
-                'name'            => $request->name,
-                'phone_number'    => $request->phone_number,
-                'message'         => $request->message,
-                'food'            => $request->food,
-                'place'           => $request->place,
-                'service'         => $request->service,
-                'reception'       => $request->reception,
-                'speed'           => $request->speed,
-                'staff'           => $request->staff,
+                'hotel_id' => $hotel->id,
+                'rate_branch_id' => $request->rate_branch_id,
+                'name' => $request->name,
+                'phone_number' => $request->phone_number,
+                'message' => $request->message,
+                'food' => $request->food,
+                'place' => $request->place,
+                'service' => $request->service,
+                'reception' => $request->reception,
+                'speed' => $request->speed,
+                'staff' => $request->staff,
             ]);
             $success = [
                 'message' => trans('messages.hotelRatedSuccessfully'),
             ];
             return ApiController::respondWithSuccess($success);
-        }else{
+        } else {
             $error = ['message' => trans('messages.not_found')];
             return ApiController::respondWithErrorNOTFoundObject($error);
         }
     }
+
     public function contact_us($subdomain)
     {
         $hotel = Hotel::whereSubdomain($subdomain)->first();
-        if ($hotel)
-        {
+        if ($hotel) {
             $contact = HotelContact::whereHotelId($hotel->id)->first();
-            if ($contact)
-            {
+            if ($contact) {
                 return ApiController::respondWithSuccess(new HotelContactResource($contact));
-            }else{
+            } else {
                 $error = ['message' => trans('messages.not_found')];
                 return ApiController::respondWithErrorNOTFoundObject($error);
             }
-        }else{
+        } else {
             $error = ['message' => trans('messages.not_found')];
             return ApiController::respondWithErrorNOTFoundObject($error);
         }
     }
+
     public function pixel_codes($subdomain)
     {
         $hotel = Hotel::whereSubdomain($subdomain)->first();
-        if ($hotel)
-        {
+        if ($hotel) {
             $codes = HotelPixel::whereHotelId($hotel->id)->get();
             return ApiController::respondWithSuccess(HotelPixelResource::collection($codes));
-        }else{
+        } else {
             $error = ['message' => trans('messages.not_found')];
             return ApiController::respondWithErrorNOTFoundObject($error);
         }
