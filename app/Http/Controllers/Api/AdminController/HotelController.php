@@ -243,4 +243,28 @@ class HotelController extends Controller
         }
     }
 
+    public function hotel_protraction(Request $request)
+    {
+        $rules = [
+            'hotel_id'    => 'required|exists:hotels,id',
+            'days'        => 'required|numeric',
+        ];
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails())
+            return ApiController::respondWithErrorArray(validateRules($validator->errors(), $rules));
+
+        $hotel = Hotel::find($request->hotel_id);
+        $status = $hotel->subscription->status == 'finished' ? 'active' : 'tentative';
+        $hotel->subscription->update([
+            'status'  => $status,
+            'end_at'  => Carbon::now()->addDays($request->days),
+        ]);
+        $hotel->update(['status' => $status]);
+        $success = [
+            'message' => trans('messages.hotel_protraction_successfully')
+        ];
+        return  ApiController::respondWithSuccess($success);
+    }
+
 }

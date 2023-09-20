@@ -28,4 +28,5 @@ return [
     'hotelWaitAdminActivation' => 'بانتظار تفعيل الحساب بالفندق من قبل  الإدارة',
     'hotelSubscriptionFinished' => 'تم أنتهاء أشتراك الفندق',
     'hotelSubscriptionTentativeFinished' => 'تم أنتهاء الفترة التجريبية للفندق',
+    'hotel_protraction_successfully' => 'تم تمديد الفترة للفندق بنجاح',
 ];
