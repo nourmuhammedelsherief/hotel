@@ -4,10 +4,19 @@ namespace App\Http\Controllers\Api\AdminController;
 
 use App\Http\Controllers\Api\ApiController;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Admin\HistoryCollection;
 use App\Http\Resources\Admin\PackageResource;
 use App\Http\Resources\Admin\SettingResource;
+use App\Models\Admin;
+use App\Models\City;
+use App\Models\Country;
+use App\Models\History;
+use App\Models\Hotel;
+use App\Models\Marketer;
 use App\Models\Package;
+use App\Models\SellerCode;
 use App\Models\Setting;
+use App\Models\Subscription;
 use Illuminate\Http\Request;
 use Validator;
 
@@ -73,5 +82,40 @@ class SettingController extends Controller
             'duration' => $request->duration == null ? $package->duration : $request->duration,
         ]);
         return ApiController::respondWithSuccess(new PackageResource($package));
+    }
+    public function control_panel_home()
+    {
+        $admins = Admin::count();
+        $active_hotels = Hotel::whereStatus('active')->count();
+        $tentative_hotels = Hotel::whereStatus('tentative')->count();
+        $inCompleteHotels = Hotel::whereStatus('in_complete')->count();
+        $waiting_admin_hotels = Hotel::whereAdminActivation('false')->count();
+        $archived_hotels = Hotel::whereArchive('true')->count();
+        $marketers = Marketer::count();
+        $seller_codes = SellerCode::count();
+        $countries = Country::count();
+        $cities = City::count();
+        $transfers = Subscription::whereType('hotel')
+            ->where('transfer_photo' , '!=' , null)
+            ->where('bank_id' , '!=' , null)
+            ->where('payment_type' , 'bank')
+            ->whereIn('status' , ['tentative' , 'finished','tentative_finished'])
+            ->count();
+        $histories = History::count();
+        $success = [
+            'admins'  => $admins,
+            'active_hotels'  => $active_hotels,
+            'tentative_hotels' => $tentative_hotels,
+            'inCompleteHotels' => $inCompleteHotels,
+            'waiting_admin_activation_hotels' => $waiting_admin_hotels,
+            'archived_hotels' => $archived_hotels,
+            'marketers' => $marketers,
+            'seller_codes' => $seller_codes,
+            'countries' => $countries,
+            'cities' => $cities,
+            'hotels_bank_transfers' => $transfers,
+            'histories' => $histories,
+        ];
+        return ApiController::respondWithSuccess($success);
     }
 }

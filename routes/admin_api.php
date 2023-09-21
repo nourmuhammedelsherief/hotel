@@ -99,6 +99,7 @@ Route::group(['middleware' => ['auth:admin-api', 'cors', 'localization']], funct
         });
         // setting routes
         Route::controller(SettingController::class)->group(function () {
+            Route::get('control_panel_home', 'control_panel_home');
             Route::get('settings', 'settings');
             Route::post('settings/edit', 'edit_setting');
             Route::get('subscription_info', 'subscription_info');
@@ -112,5 +113,3 @@ Route::group(['middleware' => ['auth:admin-api', 'cors', 'localization']], funct
         });
     });
 });
-
-//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
