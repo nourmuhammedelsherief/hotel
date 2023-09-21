@@ -54,6 +54,7 @@ Route::group(['middleware' => ['auth:hotel-api', 'cors', 'localization']], funct
     });
     Route::prefix('dashboard')->group(function () {
         Route::controller(HotelController::class)->group(function () {
+            Route::get('/hotel_control_panel_home', 'hotel_control_home');
             Route::get('/profile', 'profile');
             Route::get('/barcode_url', 'barcode');
             Route::post('/change_password', 'changePassword');

@@ -13,6 +13,16 @@ use App\Models\Bank;
 use App\Models\City;
 use App\Models\Country;
 use App\Models\Hotel;
+use App\Models\Hotel\HotelGallery;
+use App\Models\Hotel\HotelGalleryCategory;
+use App\Models\Hotel\HotelInformationCategory;
+use App\Models\Hotel\HotelInformationCategoryItem;
+use App\Models\Hotel\HotelLocation;
+use App\Models\Hotel\HotelNearServiceCategory;
+use App\Models\Hotel\HotelPixel;
+use App\Models\Hotel\HotelRateBranch;
+use App\Models\Hotel\HotelReservation;
+use App\Models\Hotel\HotelServiceCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Validator;
@@ -118,6 +128,36 @@ class HotelController extends Controller
         $hotel = $request->user();
         $banks = Bank::whereCountryId($hotel->country_id)->get();
         return ApiController::respondWithSuccess(BankResource::collection($banks));
+    }
+
+    public function hotel_control_home(Request $request)
+    {
+        $hotel = $request->user();
+        $sliders = $hotel->sliders()->count();
+        $reservations = HotelReservation::whereHotelId($hotel->id)->count();
+        $locations = HotelLocation::whereHotelId($hotel->id)->count();
+        $gallery_categories = HotelGalleryCategory::whereHotelId($hotel->id)->count();
+        $galleries = HotelGallery::whereHotelId($hotel->id)->count();
+        $rate_branches = HotelRateBranch::whereHotelId($hotel->id)->count();
+        $rates = $hotel->rates()->count();
+        $information_categories = HotelInformationCategory::whereHotelId($hotel->id)->count();
+        $service_categories = HotelServiceCategory::whereHotelId($hotel->id)->count();
+        $near_service_categories = HotelNearServiceCategory::whereHotelId($hotel->id)->count();
+        $codes = HotelPixel::whereHotelId($hotel->id)->count();
+        $success = [
+            'sliders'  => $sliders,
+            'reservations' => $reservations,
+            'locations' => $locations,
+            'gallery_categories' => $gallery_categories,
+            'galleries' => $galleries,
+            'rate_branches' => $rate_branches,
+            'rates' => $rates,
+            'information_categories' => $information_categories,
+            'service_categories' => $service_categories,
+            'near_service_categories' => $near_service_categories,
+            'pixel_codes' => $codes,
+        ];
+        return ApiController::respondWithSuccess($success);
     }
 }
 
