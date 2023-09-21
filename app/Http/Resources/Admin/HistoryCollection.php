@@ -19,7 +19,7 @@ class HistoryCollection extends ResourceCollection
             'data' => $this->collection->transform(function ($query){
                 return [
                     'id'    => $query->id,
-                    'hotel_id' => $query->hotel_id,
+                    'hotel_id' => new HotelResource($query->hotel),
                     'package_id' => $query->package_id,
                     'branch_id' => $query->branch_id,
                     'bank_id' => $query->bank_id,
