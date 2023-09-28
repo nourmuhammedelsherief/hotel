@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\ApiController;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Admin\HotelResource;
 use App\Models\Branch;
+use App\Models\Country;
 use App\Models\Hotel;
 use App\Models\HotelSlider;
 use App\Models\HotelSliderImage;
@@ -113,6 +114,7 @@ class AuthHotelController extends Controller
     public function resend_code(Request $request)
     {
         $rules = [
+            'country_id' => 'required|exists:countries,id',
             'phone_number'  => 'required|min:8',
         ];
         $validator = Validator::make($request->all(), $rules);
@@ -120,28 +122,20 @@ class AuthHotelController extends Controller
             return ApiController::respondWithErrorArray(validateRules($validator->errors(), $rules));
 
         $code = mt_rand(1000, 9999);
-        $hotel = Hotel::wherePhoneNumber($request->phone_number)->first();
-        if ($hotel)
-        {
-            // send sms to hotel owner
-            $country = $hotel->country->code;
-            // send code to phone_number
-            $message = trans('messages.hotel_verification_code') . $code .' '. trans('messages.tqnee');
-            $check = substr($hotel->phone_number, 0, 2) === '05';
-            if ($check == true) {
-                $phone = $country . ltrim($hotel->phone_number, '0');
-            } else {
-                $phone = $country . $hotel->phone_number;
-            }
-            taqnyatSms($message, $phone);
-            $success = [
-                'message' => trans('messages.codeSentSuccessfully')
-            ];
-            return ApiController::respondWithSuccess($success);
-        }else{
-            $error = ['message' => trans('messages.not_found')];
-            return ApiController::respondWithErrorNOTFoundObject($error);
+        $country = Country::find($request->country_id)->code;
+        // send code to phone_number
+        $message = trans('messages.hotel_verification_code') . $code .' '. trans('messages.tqnee');
+        $check = substr($request->phone_number, 0, 2) === '05';
+        if ($check == true) {
+            $phone = $country . ltrim($request->phone_number, '0');
+        } else {
+            $phone = $country . $request->phone_number;
         }
+        taqnyatSms($message, $phone);
+        $success = [
+            'message' => trans('messages.codeSentSuccessfully')
+        ];
+        return ApiController::respondWithSuccess($success);
     }
     public function verify_phone(Request $request)
     {
