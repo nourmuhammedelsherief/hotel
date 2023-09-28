@@ -29,4 +29,5 @@ return [
     'hotelSubscriptionFinished' => 'Hotel Subscription Finished',
     'hotelSubscriptionTentativeFinished' => 'Hotel Tentative Subscription Finished',
     'hotel_protraction_successfully' => 'Hotel Period Protraction Successfully',
+    'codeSentSuccessfully' => 'Code Sent Successfully',
 ];

@@ -41,6 +41,7 @@ Route::middleware(['cors', 'localization'])->group(function () {
     Route::controller(AuthHotelController::class)->group(function () {
         Route::post('/login', 'login');
         Route::post('/register', 'register');
+        Route::post('/resend_code', 'resend_code');
         Route::post('/verify_phone_number', 'verify_phone');
     });
     Route::controller(HotelController::class)->group(function () {

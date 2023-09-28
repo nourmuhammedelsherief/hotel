@@ -30,7 +30,7 @@ class AuthHotelController extends Controller
             'email'      => 'required|email|unique:hotels',
             'password'   => 'required|min:6',
             'password_confirmation' => 'required|same:password|min:6',
-            'phone_number'  => 'required|min:8||unique:hotels',
+            'phone_number'  => 'required|min:8|unique:hotels',
         ];
         $validator = Validator::make($request->all(), $rules);
         if ($validator->fails())
@@ -69,7 +69,7 @@ class AuthHotelController extends Controller
             'image'     => 'slider2.jpg'
         ]);
 
-        // send sms to restaurant owner
+        // send sms to hotel owner
         $country = $hotel->country->code;
         // send code to phone_number
         $message = trans('messages.hotel_verification_code') . $code .' '. trans('messages.tqnee');
@@ -109,6 +109,39 @@ class AuthHotelController extends Controller
         ]);
 
         return  ApiController::respondWithSuccess(new HotelResource($hotel));
+    }
+    public function resend_code(Request $request)
+    {
+        $rules = [
+            'phone_number'  => 'required|min:8',
+        ];
+        $validator = Validator::make($request->all(), $rules);
+        if ($validator->fails())
+            return ApiController::respondWithErrorArray(validateRules($validator->errors(), $rules));
+
+        $code = mt_rand(1000, 9999);
+        $hotel = Hotel::wherePhoneNumber($request->phone_number)->first();
+        if ($hotel)
+        {
+            // send sms to hotel owner
+            $country = $hotel->country->code;
+            // send code to phone_number
+            $message = trans('messages.hotel_verification_code') . $code .' '. trans('messages.tqnee');
+            $check = substr($hotel->phone_number, 0, 2) === '05';
+            if ($check == true) {
+                $phone = $country . ltrim($hotel->phone_number, '0');
+            } else {
+                $phone = $country . $hotel->phone_number;
+            }
+            taqnyatSms($message, $phone);
+            $success = [
+                'message' => trans('messages.codeSentSuccessfully')
+            ];
+            return ApiController::respondWithSuccess($success);
+        }else{
+            $error = ['message' => trans('messages.not_found')];
+            return ApiController::respondWithErrorNOTFoundObject($error);
+        }
     }
     public function verify_phone(Request $request)
     {

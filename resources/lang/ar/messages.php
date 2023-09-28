@@ -29,4 +29,5 @@ return [
     'hotelSubscriptionFinished' => 'تم أنتهاء أشتراك الفندق',
     'hotelSubscriptionTentativeFinished' => 'تم أنتهاء الفترة التجريبية للفندق',
     'hotel_protraction_successfully' => 'تم تمديد الفترة للفندق بنجاح',
+    'codeSentSuccessfully' => 'تم إرسال  الكود بنجاح',
 ];
