@@ -144,11 +144,12 @@ class HotelController extends Controller
                 'email'         => $request->email == null ? $hotel->email : $request->email,
                 'password'      => $request->password == null ? $hotel->password : Hash::make($request->password),
                 'phone_number'  => $request->phone_number == null ? $hotel->phone_number : $request->phone_number,
+                'status'        => $hotel->status == 'in_complete' ? 'tentative' : $hotel->status,
             ]);
-            if ($hotel->status == 'in_complete')
-            {
-                $hotel->update(['status' , 'tentative']);
-            }
+//            if ()
+//            {
+//                $hotel->update(['status' , 'tentative']);
+//            }
             // update hotel main branch
             $branch = Branch::whereHotelId($hotel->id)
                 ->whereMain('true')
