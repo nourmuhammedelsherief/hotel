@@ -23,6 +23,7 @@ use App\Models\Hotel\HotelPixel;
 use App\Models\Hotel\HotelRateBranch;
 use App\Models\Hotel\HotelReservation;
 use App\Models\Hotel\HotelServiceCategory;
+use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Validator;
@@ -156,6 +157,16 @@ class HotelController extends Controller
             'service_categories' => $service_categories,
             'near_service_categories' => $near_service_categories,
             'pixel_codes' => $codes,
+        ];
+        return ApiController::respondWithSuccess($success);
+    }
+    public function admin_support_numbers()
+    {
+        $setting = Setting::first();
+        $success = [
+            'contact_number'            => $setting->contact_number,
+            'technical_support_number'  => $setting->technical_support_number,
+            'active_whatsapp_number'    => $setting->active_whatsapp_number,
         ];
         return ApiController::respondWithSuccess($success);
     }

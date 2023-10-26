@@ -146,10 +146,7 @@ class HotelController extends Controller
                 'phone_number'  => $request->phone_number == null ? $hotel->phone_number : $request->phone_number,
                 'status'        => $hotel->status == 'in_complete' ? 'tentative' : $hotel->status,
             ]);
-//            if ()
-//            {
-//                $hotel->update(['status' , 'tentative']);
-//            }
+
             // update hotel main branch
             $branch = Branch::whereHotelId($hotel->id)
                 ->whereMain('true')

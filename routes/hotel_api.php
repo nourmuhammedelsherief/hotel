@@ -47,6 +47,7 @@ Route::middleware(['cors', 'localization'])->group(function () {
     Route::controller(HotelController::class)->group(function () {
         Route::get('/countries' , 'countries');
         Route::get('/cities/{id}' , 'cities');
+        Route::get('/admin_support_numbers' , 'admin_support_numbers');
     });
 });
 Route::group(['middleware' => ['auth:hotel-api', 'cors', 'localization']], function () {
