@@ -145,6 +145,10 @@ class HotelController extends Controller
                 'password'      => $request->password == null ? $hotel->password : Hash::make($request->password),
                 'phone_number'  => $request->phone_number == null ? $hotel->phone_number : $request->phone_number,
             ]);
+            if ($hotel->status == 'in_complete')
+            {
+                $hotel->update(['status' , 'tentative']);
+            }
             // update hotel main branch
             $branch = Branch::whereHotelId($hotel->id)
                 ->whereMain('true')
