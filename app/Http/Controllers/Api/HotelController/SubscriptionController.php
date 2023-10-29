@@ -240,7 +240,8 @@ class SubscriptionController extends Controller
         $hotel_country_price = $hotel->country->subscription_price;
         $package_price = Package::find(1)->price;
         $success = [
-            'subscribe_price' => $hotel_country_price == null ? $package_price : $hotel_country_price
+            'subscribe_price' => $hotel_country_price == null ? $package_price : $hotel_country_price,
+            'currency'        => app()->getLocale() == 'ar' ? $hotel->country->currency_ar: $hotel->country->currency_en,
         ];
         return ApiController::respondWithSuccess($success);
     }
