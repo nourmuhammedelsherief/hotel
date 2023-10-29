@@ -145,7 +145,6 @@ class SubscriptionController extends Controller
             $data = json_encode($data);
             $fatooraRes = MyFatoorah($token, $data);
             $result = json_decode($fatooraRes);
-            dd($data ,$fatooraRes, $result);
             if ($result != null and $result->IsSuccess === true) {
                 $hotel->subscription->update([
                     'invoice_id' => $result->Data->InvoiceId,
