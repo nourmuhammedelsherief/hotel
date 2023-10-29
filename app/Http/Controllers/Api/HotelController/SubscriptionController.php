@@ -239,6 +239,7 @@ class SubscriptionController extends Controller
         $hotel = $request->user();
         $hotel_country_price = $hotel->country->subscription_price;
         $package_price = Package::find(1)->price;
+        dd($hotel_country_price , $package_price);
         $success = [
             'subscribe_price' => $hotel_country_price == null ? $package_price : $hotel_country_price
         ];
