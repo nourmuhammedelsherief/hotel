@@ -40,7 +40,8 @@ class SubscriptionController extends Controller
         $seller_code = null;
         $tax = Setting::find(1)->tax;
         $discount = 0;
-        $package_price = Package::find(1)->price;
+        $hotel_country_price = $hotel->country->subscription_price;
+        $package_price = $hotel_country_price == null ? Package::find(1)->price : $hotel_country_price;
         // check if there are a seller code or not
         if ($request->seller_code != null) {
             $seller_code = SellerCode::where('seller_name', $request->seller_code)
@@ -98,7 +99,8 @@ class SubscriptionController extends Controller
                 'message' => trans('messages.your_request_sent_successfully'),
             ];
             return ApiController::respondWithSuccess($success);
-        } elseif ($request->payment_method == 'online') {
+        }
+        elseif ($request->payment_method == 'online') {
             // online payment by my fatoourah
             $amount = number_format((float)$price, 2, '.', '');
             if ($request->online_type == 'visa') {
@@ -115,7 +117,7 @@ class SubscriptionController extends Controller
             $data = array(
                 'PaymentMethodId' => $charge,
                 'CustomerName' => $name,
-                'DisplayCurrencyIso' => 'SAR',
+                'DisplayCurrencyIso' => $hotel->country->currency_code,
                 'MobileCountryCode' => $hotel->country->code,
                 'CustomerMobile' => $hotel->phone_number,
                 'CustomerEmail' => $hotel->email,
@@ -235,9 +237,10 @@ class SubscriptionController extends Controller
     public function subscribe_price(Request $request)
     {
         $hotel = $request->user();
+        $hotel_country_price = $hotel->country->subscription_price;
         $package_price = Package::find(1)->price;
         $success = [
-            'subscribe_price' => $package_price
+            'subscribe_price' => $hotel_country_price == null ? $package_price : $hotel_country_price
         ];
         return ApiController::respondWithSuccess($success);
     }
