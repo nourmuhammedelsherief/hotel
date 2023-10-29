@@ -22,6 +22,7 @@ class CountryResource extends JsonResource
             'currency_en' => $this->currency_en,
             'code'  => $this->code,
             'currency_code' => $this->currency_code,
+            'subscription_price' => intval($this->subscription_price),
             'flag'  => $this->flag == null ? null : asset('uploads/flags/' . $this->flag),
         ];
     }
