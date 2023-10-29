@@ -117,7 +117,7 @@ class SubscriptionController extends Controller
             $data = array(
                 'PaymentMethodId' => $charge,
                 'CustomerName' => $name,
-                'DisplayCurrencyIso' => $hotel->country->currency_code,
+                'DisplayCurrencyIso' => 'SAR',  //$hotel->country->currency_code
                 'MobileCountryCode' => $hotel->country->code,
                 'CustomerMobile' => $hotel->phone_number,
                 'CustomerEmail' => $hotel->email,
