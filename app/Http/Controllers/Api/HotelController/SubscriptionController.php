@@ -234,6 +234,7 @@ class SubscriptionController extends Controller
     }
     public function subscribe_price(Request $request)
     {
+        $hotel = $request->user();
         $package_price = Package::find(1)->price;
         $success = [
             'subscribe_price' => $package_price

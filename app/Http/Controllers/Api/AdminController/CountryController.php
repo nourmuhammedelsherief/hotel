@@ -24,6 +24,7 @@ class CountryController extends Controller
             'currency_ar' => 'required|string|max:191',
             'currency_en' => 'required|string|max:191',
             'code'        => 'required|max:191',
+            'subscription_price' => 'required',
             'currency_code' => 'sometimes',
             'flag'        => 'required|mimes:jpg,jpeg,png,gif,tif,psd,bmp|max:5000',
         ];
@@ -38,6 +39,7 @@ class CountryController extends Controller
             'currency_ar'    => $request->currency_ar,
             'currency_en'    => $request->currency_en,
             'code'           => $request->code,
+            'subscription_price' => $request->subscription_price,
             'currency_code'  => $request->currency_code,
             'flag'           => $request->flag == null ? null : UploadImage($request->file('flag') , 'flag' , '/uploads/flags'),
         ]);
@@ -63,6 +65,7 @@ class CountryController extends Controller
             'currency_en' => 'nullable|string|max:191',
             'code'        => 'nullable|max:191',
             'currency_code' => 'sometimes',
+            'subscription_price' => 'sometimes',
             'flag'        => 'nullable|mimes:jpg,jpeg,png,gif,tif,psd,bmp|max:5000',
         ];
         $validator = Validator::make($request->all(), $rules);
@@ -78,6 +81,7 @@ class CountryController extends Controller
                 'currency_ar'    => $request->currency_ar == null ? $country->currency_ar : $request->currency_ar,
                 'currency_en'    => $request->currency_en == null ? $country->currency_en : $request->currency_en,
                 'code'           => $request->code == null ? $country->code : $request->code,
+                'subscription_price' => $request->subscription_price == null ? $country->subscription_price : $request->subscription_price,
                 'currency_code'  => $request->currency_code == null ? $country->currency_code : $request->currency_code,
                 'flag'           => $request->flag == null ? $country->flag : UploadImageEdit($request->file('flag') , 'flag' , '/uploads/flags' , $country->flag),
             ]);

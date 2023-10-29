@@ -18,5 +18,6 @@ class Country extends Model
         'code',
         'currency_code',
         'flag',
+        'subscription_price'
     ];
 }
