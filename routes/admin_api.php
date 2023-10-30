@@ -52,6 +52,7 @@ Route::group(['middleware' => ['auth:admin-api', 'cors', 'localization']], funct
             Route::post('countries/create', 'create');
             Route::post('countries/{id}/edit', 'edit');
             Route::get('countries/{id}/delete', 'destroy');
+            Route::post('countries/{id}/active', 'active');
         });
         // city routes
         Route::controller(CityController::class)->group(function () {

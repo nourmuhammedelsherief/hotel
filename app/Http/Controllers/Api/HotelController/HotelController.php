@@ -116,7 +116,9 @@ class HotelController extends Controller
     }
     public function countries()
     {
-        $countries = Country::orderBy('id' , 'desc')->get();
+        $countries = Country::orderBy('id' , 'desc')
+            ->whereActive('true')
+            ->get();
         return ApiController::respondWithSuccess(CountryResource::collection($countries));
     }
     public function cities($id)

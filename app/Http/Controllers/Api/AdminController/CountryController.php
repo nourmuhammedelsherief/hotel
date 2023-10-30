@@ -26,6 +26,7 @@ class CountryController extends Controller
             'code'        => 'required|max:191',
             'subscription_price' => 'required',
             'currency_code' => 'sometimes',
+            'active' => 'nullable',
             'flag'        => 'required|mimes:jpg,jpeg,png,gif,tif,psd,bmp|max:5000',
         ];
         $validator = Validator::make($request->all(), $rules);
@@ -38,6 +39,7 @@ class CountryController extends Controller
             'name_en'        => $request->name_en,
             'currency_ar'    => $request->currency_ar,
             'currency_en'    => $request->currency_en,
+            'active'         => $request->active == null ? 'true' : $request->active,
             'code'           => $request->code,
             'subscription_price' => $request->subscription_price,
             'currency_code'  => $request->currency_code,
@@ -66,6 +68,7 @@ class CountryController extends Controller
             'code'        => 'nullable|max:191',
             'currency_code' => 'sometimes',
             'subscription_price' => 'sometimes',
+            'active' => 'nullable',
             'flag'        => 'nullable|mimes:jpg,jpeg,png,gif,tif,psd,bmp|max:5000',
         ];
         $validator = Validator::make($request->all(), $rules);
@@ -81,6 +84,7 @@ class CountryController extends Controller
                 'currency_ar'    => $request->currency_ar == null ? $country->currency_ar : $request->currency_ar,
                 'currency_en'    => $request->currency_en == null ? $country->currency_en : $request->currency_en,
                 'code'           => $request->code == null ? $country->code : $request->code,
+                'active'         => $request->active == null ? $country->active : $request->active,
                 'subscription_price' => $request->subscription_price == null ? $country->subscription_price : $request->subscription_price,
                 'currency_code'  => $request->currency_code == null ? $country->currency_code : $request->currency_code,
                 'flag'           => $request->flag == null ? $country->flag : UploadImageEdit($request->file('flag') , 'flag' , '/uploads/flags' , $country->flag),
@@ -104,6 +108,26 @@ class CountryController extends Controller
                 'message' => trans('messages.deleted')
             ];
             return ApiController::respondWithSuccess($success);
+        }else{
+            $error = ['message' => trans('messages.not_found')];
+            return ApiController::respondWithErrorNOTFoundObject($error);
+        }
+    }
+    public function active(Request $request , $id)
+    {
+        $country = Country::find($id);
+        if ($country){
+            $rules = [
+                'active'   => 'required|in:true,false',
+            ];
+            $validator = Validator::make($request->all(), $rules);
+            if ($validator->fails())
+                return ApiController::respondWithErrorArray(validateRules($validator->errors(), $rules));
+
+            $country->update([
+                'active'   => $request->active,
+            ]);
+            return ApiController::respondWithSuccess(new CountryResource($country));
         }else{
             $error = ['message' => trans('messages.not_found')];
             return ApiController::respondWithErrorNOTFoundObject($error);
