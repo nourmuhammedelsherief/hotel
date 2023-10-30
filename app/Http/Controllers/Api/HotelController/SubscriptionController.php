@@ -42,7 +42,6 @@ class SubscriptionController extends Controller
         $discount = 0;
         $hotel_country_price = $hotel->country->subscription_price;
         $package_price = $hotel_country_price == null ? Package::find(1)->price : $hotel_country_price;
-        dd($package_price);
         // check if there are a seller code or not
         if ($request->seller_code != null) {
             $seller_code = SellerCode::where('seller_name', $request->seller_code)
