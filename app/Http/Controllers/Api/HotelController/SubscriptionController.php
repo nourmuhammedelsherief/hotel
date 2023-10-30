@@ -103,7 +103,7 @@ class SubscriptionController extends Controller
         elseif ($request->payment_method == 'online') {
             // online payment by my fatoourah
             $amount = number_format((float)$price, 2, '.', '');
-            dd($amount);
+            dd($amount , $hotel_country_price);
             if ($request->online_type == 'visa') {
                 $charge = 2;
             } elseif ($request->online_type == 'mada') {
