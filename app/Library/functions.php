@@ -108,7 +108,7 @@ function MyFatoorahStatus($api, $PaymentId)
 {
     // dd($PaymentId);
     $token = $api;
-    $basURL = "https://apitest.myfatoorah.com";
+    $basURL = "https://api-sa.myfatoorah.com/";
     $curl = curl_init();
     curl_setopt_array($curl, array(
         CURLOPT_URL => "$basURL/v2/GetPaymentStatus",
@@ -132,7 +132,7 @@ function MyFatoorah($api, $userData)
 {
     // dd($userData);
     $token = $api;
-    $basURL = "https://apitest.myfatoorah.com";
+    $basURL = "https://api-sa.myfatoorah.com/";
     $curl = curl_init();
     curl_setopt_array($curl, array(
         CURLOPT_URL => "$basURL/v2/ExecutePayment",
