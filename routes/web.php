@@ -24,6 +24,8 @@ use \App\Http\Controllers\AdminController\AdminController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+Route::get('/check-hotel-status/{id1?}/{id2?}', [\App\Http\Controllers\Api\HotelController\SubscriptionController::class , 'check_status'])->name('checkHotelStatus');
+
 //Route::domain('{account}.localhost')->group(function () {
 //    Route::get('/', function ($account) {
 //        $hotel = \App\Models\Hotel::whereSubdomain($account)->firstOrFail();
