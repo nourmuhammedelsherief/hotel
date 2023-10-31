@@ -132,7 +132,7 @@ function MyFatoorah($api, $userData)
 {
     // dd($userData);
     $token = $api;
-    $basURL = "https://apitesف.myfatoorah.com";
+    $basURL = "https://apitest.myfatoorah.com";
     $curl = curl_init();
     curl_setopt_array($curl, array(
         CURLOPT_URL => "$basURL/v2/ExecutePayment",
