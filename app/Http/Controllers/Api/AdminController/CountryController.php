@@ -25,6 +25,7 @@ class CountryController extends Controller
             'currency_en' => 'required|string|max:191',
             'code'        => 'required|max:191',
             'subscription_price' => 'required',
+            'rial_price' => 'required',
             'currency_code' => 'sometimes',
             'active' => 'nullable',
             'flag'        => 'required|mimes:jpg,jpeg,png,gif,tif,psd,bmp|max:5000',
@@ -42,6 +43,7 @@ class CountryController extends Controller
             'active'         => $request->active == null ? 'true' : $request->active,
             'code'           => $request->code,
             'subscription_price' => $request->subscription_price,
+            'rial_price' => $request->rial_price,
             'currency_code'  => $request->currency_code,
             'flag'           => $request->flag == null ? null : UploadImage($request->file('flag') , 'flag' , '/uploads/flags'),
         ]);
@@ -68,6 +70,7 @@ class CountryController extends Controller
             'code'        => 'nullable|max:191',
             'currency_code' => 'sometimes',
             'subscription_price' => 'sometimes',
+            'rial_price' => 'sometimes',
             'active' => 'nullable',
             'flag'        => 'nullable|mimes:jpg,jpeg,png,gif,tif,psd,bmp|max:5000',
         ];
@@ -86,6 +89,7 @@ class CountryController extends Controller
                 'code'           => $request->code == null ? $country->code : $request->code,
                 'active'         => $request->active == null ? $country->active : $request->active,
                 'subscription_price' => $request->subscription_price == null ? $country->subscription_price : $request->subscription_price,
+                'rial_price' => $request->rial_price == null ? $country->rial_price : $request->rial_price,
                 'currency_code'  => $request->currency_code == null ? $country->currency_code : $request->currency_code,
                 'flag'           => $request->flag == null ? $country->flag : UploadImageEdit($request->file('flag') , 'flag' , '/uploads/flags' , $country->flag),
             ]);
@@ -133,6 +137,4 @@ class CountryController extends Controller
             return ApiController::respondWithErrorNOTFoundObject($error);
         }
     }
-
-
 }

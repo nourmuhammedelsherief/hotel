@@ -40,7 +40,7 @@ class SubscriptionController extends Controller
         $seller_code = null;
         $tax = Setting::find(1)->tax;
         $discount = 0;
-        $hotel_country_price = $hotel->country->subscription_price;
+        $hotel_country_price = $hotel->country->rial_price;
         $package_price = $hotel_country_price == null ? Package::find(1)->price : $hotel_country_price;
         // check if there are a seller code or not
         if ($request->seller_code != null) {
@@ -117,9 +117,9 @@ class SubscriptionController extends Controller
             $data = array(
                 'PaymentMethodId' => $charge,
                 'CustomerName' => $name,
-                'DisplayCurrencyIso' => $hotel->country->currency_code,
-                'MobileCountryCode' => $hotel->country->code,
-                'CustomerMobile' => $hotel->phone_number,
+                'DisplayCurrencyIso' => 'SAR',
+                'MobileCountryCode' => '00966',
+                'CustomerMobile' => $hotel->country->id == 1 ? $hotel->phone_number : '0500000000',
                 'CustomerEmail' => $hotel->email,
                 'InvoiceValue' => $amount,
                 'CallBackUrl' => url('/check-hotel-status'),

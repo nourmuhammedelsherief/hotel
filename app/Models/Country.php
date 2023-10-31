@@ -19,6 +19,7 @@ class Country extends Model
         'currency_code',
         'flag',
         'subscription_price',
+        'rial_price',
         'active'
     ];
 }
