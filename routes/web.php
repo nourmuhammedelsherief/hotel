@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\ApiController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\App;
 /**
@@ -25,6 +26,12 @@ use \App\Http\Controllers\AdminController\AdminController;
 |
 */
 Route::get('/check-hotel-status/{id1?}/{id2?}', [\App\Http\Controllers\Api\HotelController\SubscriptionController::class , 'check_status'])->name('checkHotelStatus');
+Route::get('/error', function (){
+    $error = [
+        'message' => trans('messages.errorPayment')
+    ];
+    return ApiController::respondWithErrorObject($error);
+});
 
 //Route::domain('{account}.localhost')->group(function () {
 //    Route::get('/', function ($account) {

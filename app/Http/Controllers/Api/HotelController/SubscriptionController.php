@@ -152,7 +152,7 @@ class SubscriptionController extends Controller
                     'amount' => $price,
                     'tax_value' => $tax_value,
                     'discount_value' => $discount,
-                    'seller_code_id' => $seller_code == null ? null : $seller_code->id,
+                    'seller_code_id' => $seller_code?->id,
                 ]);
                 $success = [
                     'payment_url' => $result->Data->PaymentURL
@@ -184,7 +184,7 @@ class SubscriptionController extends Controller
                 'payment_type' => 'online',
                 'details' =>   ($subscription->status == 'tentative' or $subscription->status == 'tentative_finished') ? trans('messages.hotel_new_subscribe') : trans('messages.hotel_renew_subscribe'),
                 'invoice_id' => $subscription->invoice_id,
-                'price'     => $subscription->package->price,
+                'price'     => $subscription->amount,
                 'paid_amount' => $subscription->amount,
                 'discount_value' => $subscription->discount_value,
                 'tax_value'      => $subscription->tax_value,
