@@ -32,7 +32,7 @@ class SubscriptionCollection extends ResourceCollection
                     'tax_value'      => $query->tax_value,
                     'discount_value' => $query->discount_value,
                     'subscription_type' => $query->subscription_type,
-                    'transfer_photo' => $query->transfer_photo == null ? null : asset('public/uploads/transfers/' . $query->transfer_photo),
+                    'transfer_photo' => $query->transfer_photo == null ? null : asset('/uploads/transfers/' . $query->transfer_photo),
                     'invoice_id'     => $query->invoice_id,
                     'paid_at'        => $query->paid_at == null ? null : $query->paid_at->format('Y-m-d H:i:s'),
                     'end_at'         => $query->end_at == null ? null : $query->end_at->format('Y-m-d'),
