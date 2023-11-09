@@ -26,6 +26,8 @@ class SubscriptionCollection extends ResourceCollection
                     'package_id'     => $query->package_id,
                     'seller_code_id' => $query->seller_code_id,
                     'bank_id'        => new BankResource($query->bank),
+                    'bank_name_ar'   => $query->bank->name_ar,
+                    'bank_name_en'   => $query->bank->name_en,
                     'type'           => $query->type,
                     'status'         => $query->status,
                     'amount'         => $query->amount,
