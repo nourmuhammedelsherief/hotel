@@ -4,6 +4,7 @@ namespace App\Http\Resources\Hotel;
 
 use App\Http\Resources\Admin\BankResource;
 use App\Http\Resources\Admin\CountryResource;
+use App\Http\Resources\Admin\HotelResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
@@ -21,13 +22,11 @@ class SubscriptionCollection extends ResourceCollection
             'data' => $this->collection->transform(function ($query){
                 return [
                     'id'             => $query->id,
-                    'hotel_id'       => $query->hotel_id,
+                    'hotel_id'       => new HotelResource($query->hotel_id),
                     'branch_id'      => $query->branch_id,
                     'package_id'     => $query->package_id,
                     'seller_code_id' => $query->seller_code_id,
                     'bank_id'        => new BankResource($query->bank),
-                    'bank_name_ar'   => $query->bank->name_ar,
-                    'bank_name_en'   => $query->bank->name_en,
                     'type'           => $query->type,
                     'status'         => $query->status,
                     'amount'         => $query->amount,
