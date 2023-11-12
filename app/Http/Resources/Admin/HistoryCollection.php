@@ -30,7 +30,7 @@ class HistoryCollection extends ResourceCollection
                     'transfer_photo' => $query->transfer_photo == null ? null : asset('/uploads/transfers/' . $query->transfer_photo),
                     'invoice_id' => $query->invoice_id,
                     'operation_date' => $query->operation_date?->format('Y-m-d'),
-                    'price'        => doubleval(number_format((float)$query->hotel->country->riyal_price, 2, '.', '')),
+                    'price'        => doubleval(number_format((float)$query->hotel->country->rial_price, 2, '.', '')),
                     'discount_value' => doubleval(number_format((float)$query->discount_value, 2, '.', '')),
                     'tax_value'  => doubleval(number_format((float)$query->tax_value, 2, '.', '')),
                     'total_amount' => doubleval(number_format((float)$query->paid_amount, 2, '.', '')),
