@@ -22,7 +22,7 @@ class SubscriptionCollection extends ResourceCollection
             'data' => $this->collection->transform(function ($query){
                 return [
                     'id'             => $query->id,
-                    'hotel_id'       => new HotelResource($query->hotel_id),
+                    'hotel_id'       => new HotelResource($query->hotel),
                     'branch_id'      => $query->branch_id,
                     'package_id'     => $query->package_id,
                     'seller_code_id' => $query->seller_code_id,
