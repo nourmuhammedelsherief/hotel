@@ -237,10 +237,17 @@ class SubscriptionController extends Controller
     public function subscribe_price(Request $request)
     {
         $hotel = $request->user();
+        $tax = Setting::first()->tax;
         $hotel_country_price = $hotel->country->subscription_price;
         $package_price = Package::find(1)->price;
+        $subscribe_price = $hotel_country_price == null ? $package_price : $hotel_country_price;
+        $tax_value = $subscribe_price * $tax / 100;
+        $total = $subscribe_price + $tax_value;
+
         $success = [
-            'subscribe_price' => $hotel_country_price == null ? $package_price : $hotel_country_price,
+            'subscribe_price' => $subscribe_price,
+            'tax_value'       => $tax_value,
+            'total_price'     => $total,
             'currency'        => app()->getLocale() == 'ar' ? $hotel->country->currency_ar: $hotel->country->currency_en,
         ];
         return ApiController::respondWithSuccess($success);
