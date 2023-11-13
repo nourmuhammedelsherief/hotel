@@ -54,8 +54,8 @@ class OperationController extends Controller
                 'operation_date' => Carbon::now(),
                 'transfer_photo' => $subscription->transfer_photo,
                 'status'     => ($subscription->status == 'tentative' or $subscription->status == 'tentative_finished') ? 'new' : 'renew',
-                'accepted_admin_id'   => auth()->guard('admin')->user()->id,
-                'accepted_admin_name' => auth()->guard('admin')->user()->name,
+                'accepted_admin_id'   => $request->user()->id,
+                'accepted_admin_name' => $request->user()->name,
             ]);
             $subscription->update([
                 'status' => 'active',
