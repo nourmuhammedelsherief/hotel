@@ -47,13 +47,15 @@ class OperationController extends Controller
                 'payment_type' => 'bank',
                 'details' =>   ($subscription->status == 'tentative' or $subscription->status == 'tentative_finished') ? trans('messages.hotel_new_subscribe') : trans('messages.hotel_renew_subscribe'),
                 'bank_id' => $subscription->bank_id,
-                'price'   => $subscription->package->price,
+                'price'   => $subscription->hotel->country->rial_price,
                 'paid_amount' => $subscription->amount,
                 'discount_value' => $subscription->discount_value,
                 'tax_value'      => $subscription->tax_value,
                 'operation_date' => Carbon::now(),
                 'transfer_photo' => $subscription->transfer_photo,
-                'status'     => ($subscription->status == 'tentative' or $subscription->status == 'tentative_finished') ? 'new' : 'renew'
+                'status'     => ($subscription->status == 'tentative' or $subscription->status == 'tentative_finished') ? 'new' : 'renew',
+                'accepted_admin_id'   => auth()->guard('admin')->user()->id,
+                'accepted_admin_name' => auth()->guard('admin')->user()->name,
             ]);
             $subscription->update([
                 'status' => 'active',

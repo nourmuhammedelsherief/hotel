@@ -25,6 +25,8 @@ class History extends Model
         'paid_amount',
         'discount_value',
         'tax_value',
+        'accepted_admin_id',
+        'accepted_admin_name',
     ];
 
     protected $casts = ['operation_date' => 'datetime'];
@@ -44,5 +46,9 @@ class History extends Model
     public function bank()
     {
         return $this->belongsTo(Bank::class , 'bank_id');
+    }
+    public function admin()
+    {
+        return $this->belongsTo(Admin::class , 'accepted_admin_id');
     }
 }
