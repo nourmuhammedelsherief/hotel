@@ -34,6 +34,7 @@ class HistoryCollection extends ResourceCollection
                     'discount_value' => doubleval(number_format((float)$query->discount_value, 2, '.', '')),
                     'tax_value'  => doubleval(number_format((float)$query->tax_value, 2, '.', '')),
                     'total_amount' => doubleval(number_format((float)$query->paid_amount, 2, '.', '')),
+                    'accepted_admin_name' => $query->accepted_admin_name,
                     'created_at' => $query->created_at->format('Y-m-d')
                 ];
             }),
