@@ -54,6 +54,11 @@ class HomeController extends Controller
                     'message' => trans('messages.hotelWaitAdminActivation'),
                 ];
                 return ApiController::respondWithErrorObject(array($errors));
+            }elseif ($hotel->archive == 'true') {
+                $errors = [
+                    'message' => trans('messages.hotelArchived'),
+                ];
+                return ApiController::respondWithErrorObject(array($errors));
             }
 
             return ApiController::respondWithSuccess(new SiteHotelResource($hotel));
