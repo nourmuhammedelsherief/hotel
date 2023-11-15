@@ -12,6 +12,7 @@ use App\Models\Setting;
 use App\Models\Subscription;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Spatie\FlareClient\Api;
 use Validator;
@@ -244,6 +245,18 @@ class HotelController extends Controller
                 'message' => trans('messages.data_changed_successfully')
             ];
             return  ApiController::respondWithSuccess($success);
+        }else{
+            $error = ['message' => trans('messages.not_found')];
+            return ApiController::respondWithErrorNOTFoundObject($error);
+        }
+    }
+    public function login($id)
+    {
+        $hotel = Hotel::find($id);
+        if ($hotel)
+        {
+            Auth::guard('hotel')->login($hotel);
+            return ApiController::respondWithSuccess(new HotelResource($hotel));
         }else{
             $error = ['message' => trans('messages.not_found')];
             return ApiController::respondWithErrorNOTFoundObject($error);

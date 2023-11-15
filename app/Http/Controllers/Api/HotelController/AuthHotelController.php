@@ -196,13 +196,13 @@ class AuthHotelController extends Controller
                 ];
                 return ApiController::respondWithErrorObject(array($errors));
             }
-//            if ($hotel->admin_activation == 'false')
-//            {
-//                $errors = [
-//                    'message' => trans('messages.hotelWaitAdminActivation'),
-//                ];
-//                return ApiController::respondWithErrorObject(array($errors));
-//            }
+            elseif($hotel->admin_activation == 'false')
+            {
+                $errors = [
+                    'message' => trans('messages.hotelWaitAdminActivation'),
+                ];
+                return ApiController::respondWithErrorObject(array($errors));
+            }
             $hotel->update([
                 'api_token' => generateApiToken($hotel->id, 50),
             ]);

@@ -96,6 +96,7 @@ Route::group(['middleware' => ['auth:admin-api', 'cors', 'localization']], funct
             Route::post('hotels/{id}/archive', 'archive');
             Route::get('hotels/{id}/delete', 'destroy');
             Route::get('hotels/{id}/activate', 'active_hotel');
+            Route::get('hotels/{id}/login', 'login');
             Route::post('hotel_protraction', 'hotel_protraction');
         });
         // setting routes
