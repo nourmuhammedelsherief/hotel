@@ -144,6 +144,7 @@ class HotelController extends Controller
                 'email'         => $request->email == null ? $hotel->email : $request->email,
                 'password'      => $request->password == null ? $hotel->password : Hash::make($request->password),
                 'phone_number'  => $request->phone_number == null ? $hotel->phone_number : $request->phone_number,
+                'admin_activation' => $hotel->status == 'in_complete' ? 'false' : $hotel->admin_activation,
                 'status'        => $hotel->status == 'in_complete' ? 'tentative' : $hotel->status,
             ]);
 
@@ -234,6 +235,10 @@ class HotelController extends Controller
         {
             $hotel->update([
                 'admin_activation' => 'true',
+            ]);
+            $tentative_period = Setting::first()->tentative_period;
+            $hotel->subscription->update([
+                'end_at'  => Carbon::now()->addDays($tentative_period),
             ]);
             $success = [
                 'message' => trans('messages.data_changed_successfully')
