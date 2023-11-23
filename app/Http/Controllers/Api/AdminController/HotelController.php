@@ -256,6 +256,9 @@ class HotelController extends Controller
         if ($hotel)
         {
             Auth::guard('hotel')->login($hotel);
+            $hotel->update([
+                'api_token' => generateApiToken($hotel->id, 50),
+            ]);
             return ApiController::respondWithSuccess(new HotelResource($hotel));
         }else{
             $error = ['message' => trans('messages.not_found')];
