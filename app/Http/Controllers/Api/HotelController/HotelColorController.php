@@ -44,6 +44,7 @@ class HotelColorController extends Controller
     public function get_hotel_colors(Request $request)
     {
         $hotel = $request->user();
+        dd($hotel->color);
         return ApiController::respondWithSuccess(new HotelColorResource($hotel->color));
     }
 }
