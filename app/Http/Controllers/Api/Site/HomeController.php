@@ -246,10 +246,9 @@ class HomeController extends Controller
     public function hotel_colors($subdomain)
     {
         $hotel = Hotel::whereSubdomain($subdomain)->first();
-        $color = HotelColor::whereHotelId($hotel->id)->first();
-        if ($color)
+        if ($hotel->colors)
         {
-            return ApiController::respondWithSuccess(new HotelColorResource($color));
+            return ApiController::respondWithSuccess(new HotelColorResource($hotel->colors));
         }else{
             $error = ['message' => trans('messages.not_found')];
             return ApiController::respondWithErrorNOTFoundObject($error);
