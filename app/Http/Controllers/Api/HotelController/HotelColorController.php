@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\HotelController;
 use App\Http\Controllers\Api\ApiController;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Hotel\HotelColorResource;
+use App\Models\Hotel;
 use App\Models\HotelColor;
 use Illuminate\Http\Request;
 use Spatie\FlareClient\Api;
@@ -44,7 +45,13 @@ class HotelColorController extends Controller
     public function get_hotel_colors(Request $request)
     {
         $hotel = $request->user();
-        dd($hotel->color);
-        return ApiController::respondWithSuccess(new HotelColorResource($hotel->color));
+        $color = HotelColor::whereHotelId($hotel->id)->first();
+        if ($color)
+        {
+            return ApiController::respondWithSuccess(new HotelColorResource($color));
+        }else{
+            $error = ['message' => trans('messages.not_found')];
+            return ApiController::respondWithErrorNOTFoundObject($error);
+        }
     }
 }

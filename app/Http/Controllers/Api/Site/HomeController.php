@@ -21,6 +21,7 @@ use App\Models\Hotel\HotelGallery;
 use App\Models\Hotel\HotelGalleryIcon;
 use App\Models\Hotel\HotelGalleryCategory;
 use App\Models\Hotel\HotelContact;
+use App\Models\HotelColor;
 use App\Models\HotelSlider;
 use App\Models\Hotel\HotelPixel;
 use Illuminate\Http\Request;
@@ -245,6 +246,13 @@ class HomeController extends Controller
     public function hotel_colors($subdomain)
     {
         $hotel = Hotel::whereSubdomain($subdomain)->first();
-        return ApiController::respondWithSuccess(new HotelColorResource($hotel->color));
+        $color = HotelColor::whereHotelId($hotel->id)->first();
+        if ($color)
+        {
+            return ApiController::respondWithSuccess(new HotelColorResource($color));
+        }else{
+            $error = ['message' => trans('messages.not_found')];
+            return ApiController::respondWithErrorNOTFoundObject($error);
+        }
     }
 }
