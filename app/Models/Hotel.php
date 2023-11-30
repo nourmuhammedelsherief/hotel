@@ -92,7 +92,7 @@ class Hotel extends Authenticatable
     }
     public function rates()
     {
-        return $this->hasMany(HotelRate::class , 'hotel_id');
+        return $this->hasOne(HotelRate::class , 'hotel_id');
     }
     public function colors()
     {
