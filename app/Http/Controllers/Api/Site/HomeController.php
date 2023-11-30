@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Site;
 
 use App\Http\Controllers\Api\ApiController;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Hotel\HotelColorResource;
 use App\Http\Resources\Hotel\HotelContactResource;
 use App\Http\Resources\Hotel\HotelGalleryCategoryCollection;
 use App\Http\Resources\Hotel\HotelGalleryCollection;
@@ -239,5 +240,11 @@ class HomeController extends Controller
             $error = ['message' => trans('messages.not_found')];
             return ApiController::respondWithErrorNOTFoundObject($error);
         }
+    }
+
+    public function hotel_colors($subdomain)
+    {
+        $hotel = Hotel::whereSubdomain($subdomain)->first();
+        return ApiController::respondWithSuccess(new HotelColorResource($hotel->color));
     }
 }

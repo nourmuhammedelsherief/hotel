@@ -22,6 +22,7 @@ use \App\Http\Controllers\Api\HotelController\HotelNearServiceController;
 use \App\Http\Controllers\Api\HotelController\HotelNearServiceCategoryController;
 use \App\Http\Controllers\Api\HotelController\HotelNearServiceCategoryItemController;
 use \App\Http\Controllers\Api\HotelController\HotelPixelController;
+use \App\Http\Controllers\Api\HotelController\HotelColorController;
 // hotel controllers
 
 /*
@@ -96,6 +97,11 @@ Route::group(['middleware' => ['auth:hotel-api', 'cors', 'localization']], funct
             Route::post('/gallery/categories/{id}/edit' , 'edit');
             Route::get('/gallery/categories/{id}/show' , 'show');
             Route::get('/gallery/categories/{id}/delete' , 'destroy');
+        });
+        // hotel colors routes
+        Route::controller(HotelColorController::class)->group(function (){
+            Route::post('/create_or_update_colors' , 'add_colors');
+            Route::get('/get_hotel_colors' , 'get_hotel_colors');
         });
         Route::controller(GalleryController::class)->group(function (){
             Route::get('/get_hotel_gallery_info' , 'get_hotel_gallery_info');
