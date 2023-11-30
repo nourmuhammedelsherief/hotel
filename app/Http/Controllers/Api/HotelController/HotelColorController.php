@@ -45,9 +45,10 @@ class HotelColorController extends Controller
     public function get_hotel_colors(Request $request)
     {
         $hotel = $request->user();
-        if ($hotel->colors)
+        $color = HotelColor::whereHotelId($hotel->id)->first();
+        if ($color)
         {
-            return ApiController::respondWithSuccess(new HotelColorResource($hotel->colors));
+            return ApiController::respondWithSuccess(new HotelColorResource($color));
         }else{
             $error = ['message' => trans('messages.not_found')];
             return ApiController::respondWithErrorNOTFoundObject($error);
