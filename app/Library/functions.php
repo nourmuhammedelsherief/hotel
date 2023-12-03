@@ -198,7 +198,6 @@ function express_payment($merchant_key, $password, $amount , $success_url, $orde
     $order_description = 'pay order value';
     $str_to_hash = $orderId . $amount . $currency . $order_description . $password;
     $hash = sha1(md5(strtoupper($str_to_hash)));
-    dd($success_url . ''. $orderId);
     $main_req = array(
         'action' => 'SALE',
         'edfa_merchant_id' => $merchant_key,
@@ -216,7 +215,7 @@ function express_payment($merchant_key, $password, $amount , $success_url, $orde
         'payer_email' => $email,
         'payer_phone' => '966525789635',
         'payer_ip' => '127.0.0.1',
-        'term_url_3ds' => $success_url . ''. $orderId,
+        'term_url_3ds' => $success_url . '/'. $orderId,
         'auth' => 'N',
         'recurring_init' => 'N',
         'hash' => $hash,
