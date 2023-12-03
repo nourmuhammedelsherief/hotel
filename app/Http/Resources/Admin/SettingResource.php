@@ -24,6 +24,9 @@ class SettingResource extends JsonResource
             'tentative_period'  => $this->tentative_period,
             'tax'  => $this->tax,
             'online_token'  => $this->online_token,
+            'online_payment'    => $this->online_payment,
+            'edfa_merchant_key' => $this->edfa_merchant_key,
+            'edfa_password'     => $this->edfa_password,
         ];
     }
 }
