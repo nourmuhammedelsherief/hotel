@@ -230,6 +230,7 @@ function express_payment($merchant_key, $password, $amount , $success_url, $orde
     $httpcode = curl_getinfo($getter, CURLINFO_HTTP_CODE);
     echo $result;
     $result = json_decode($result);
+    dd($result);
     return $result->redirect_url;
 
 }
