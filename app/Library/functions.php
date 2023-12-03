@@ -193,7 +193,7 @@ function taqnyatSms($msgBody, $reciver)
 }
 function express_payment($merchant_key, $password, $amount , $success_url, $orderId, $user_name, $email)
 {
-    $order_id = 'order-' . mt_rand(1000, 9999);
+    $order_id = 'order-' . $orderId;
     $currency = 'SAR';
     $order_description = 'pay order value';
     $str_to_hash = $orderId . $amount . $currency . $order_description . $password;
@@ -201,7 +201,7 @@ function express_payment($merchant_key, $password, $amount , $success_url, $orde
     $main_req = array(
         'action' => 'SALE',
         'edfa_merchant_id' => $merchant_key,
-        'order_id' => "$orderId",
+        'order_id' => "$order_id",
         'order_amount' => $amount,
         'order_currency' => $currency,
         'order_description' => $order_description,
