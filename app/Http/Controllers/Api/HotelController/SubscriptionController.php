@@ -105,6 +105,13 @@ class SubscriptionController extends Controller
             $amount = number_format((float)$price, 2, '.', '');
             $setting = Setting::first();
             if ($setting->online_payment == 'edfa') {
+                $hotel->subscription->update([
+                    'payment_type' => $request->payment_method,
+                    'amount' => $price,
+                    'tax_value' => $tax_value,
+                    'discount_value' => $discount,
+                    'seller_code_id' => $seller_code?->id,
+                ]);
                 $success = [
                     'payment_url' => express_payment($setting->edfa_merchant_key, $setting->edfa_password, $amount, 'https://api-hotel.easyhotelll.com/api/edfa-check-hotel-status', $hotel->subscription->id, $hotel->name_ar, $hotel->email)
                 ];
