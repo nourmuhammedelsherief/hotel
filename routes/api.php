@@ -18,7 +18,6 @@ use \App\Http\Controllers\Api\Site\HotelNearServiceController;
 |
 */
 Route::get('/check-hotel-status/{id1?}/{id2?}', [\App\Http\Controllers\Api\HotelController\SubscriptionController::class , 'check_status'])->name('checkHotelStatus');
-Route::get('/edfa-check-hotel-status/{id1?}/{id2?}', [\App\Http\Controllers\Api\HotelController\SubscriptionController::class , 'check_edfa_status'])->name('checkEdfaHotelStatus');
 Route::group(['middleware' => ['cors', 'localization']], function () {
     Route::controller(HomeController::class)->group(function (){
         Route::get('/{subdomain}' , 'index');

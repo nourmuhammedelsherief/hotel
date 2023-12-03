@@ -37,6 +37,7 @@ use \App\Http\Controllers\Api\HotelController\HotelColorController;
 */
 
 Route::get('/check-hotel-status/{id1?}/{id2?}', [SubscriptionController::class , 'check_status'])->name('checkHotelStatus');
+Route::get('/edfa-check-hotel-status/{id1?}/{id2?}', [\App\Http\Controllers\Api\HotelController\SubscriptionController::class , 'check_edfa_status'])->name('checkEdfaHotelStatus');
 
 Route::middleware(['cors', 'localization'])->group(function () {
     Route::controller(AuthHotelController::class)->group(function () {
