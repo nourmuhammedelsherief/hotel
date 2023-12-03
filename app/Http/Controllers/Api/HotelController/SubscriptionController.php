@@ -25,7 +25,7 @@ class SubscriptionController extends Controller
         $rules = [
             'payment_method' => 'required|in:online,bank',
             'transfer_photo' => 'required_if:payment_method,bank|mimes:jpg,jpeg,png,gif,tif,bmp,psd|max:5000',
-            'online_type' => 'required_if:payment_method,online|in:visa,mada,apple_pay',
+            'online_type' => 'sometimes|in:visa,mada,apple_pay',
             'seller_code' => 'nullable|exists:seller_codes,seller_name',
             'bank_id' => 'required_if:payment_method,bank|exists:banks,id',
         ];
@@ -103,67 +103,75 @@ class SubscriptionController extends Controller
         elseif ($request->payment_method == 'online') {
             // online payment by my fatoourah
             $amount = number_format((float)$price, 2, '.', '');
-            express_payment('2b1b4ef8-4782-421b-8cab-915fc5675eb6' , 'eb8d577c51eb49423c391cfe7a2241cb' , $amount , 'checkEdfaHotelStatus' , $hotel->subscription->id , $hotel->name_ar , $hotel->email);
-            if ($request->online_type == 'visa') {
-                $charge = 2;
-            } elseif ($request->online_type == 'mada') {
-                $charge = 6;
-            } elseif ($request->online_type == 'apple_pay') {
-                $charge = 11;
-            } else {
-                $charge = 2;
-            }
-            $name = $hotel->subdomain;
-            $token = Setting::first()->online_token;
-            $data = array(
-                'PaymentMethodId' => $charge,
-                'CustomerName' => $name,
-                'DisplayCurrencyIso' => 'SAR',
-                'MobileCountryCode' => '00966',
-                'CustomerMobile' => $hotel->country->id == 1 ? $hotel->phone_number : '0500000000',
-                'CustomerEmail' => $hotel->email,
-                'InvoiceValue' => $amount,
-                'CallBackUrl' => url('/check-hotel-status'),
-                'ErrorUrl' => url('/error'),
-                'Language' => app()->getLocale(),
-                'CustomerReference' => 'ref 1',
-                'CustomerCivilId' => '12345678',
-                'UserDefinedField' => 'Custom field',
-                'ExpireDate' => '',
-                'CustomerAddress' => array(
-                    'Block' => '',
-                    'Street' => '',
-                    'HouseBuildingNo' => '',
-                    'Address' => '',
-                    'AddressInstructions' => '',
-                ),
-                'InvoiceItems' => [array(
-                    'ItemName' => $name,
-                    'Quantity' => '1',
-                    'UnitPrice' => $amount,
-                )],
-            );
-            $data = json_encode($data);
-            $fatooraRes = MyFatoorah($token, $data);
-            $result = json_decode($fatooraRes);
-            if ($result != null and $result->IsSuccess === true) {
-                $hotel->subscription->update([
-                    'invoice_id' => $result->Data->InvoiceId,
-                    'payment_type' => $request->payment_method,
-                    'amount' => $price,
-                    'tax_value' => $tax_value,
-                    'discount_value' => $discount,
-                    'seller_code_id' => $seller_code?->id,
-                ]);
+            $setting = Setting::first();
+            if ($setting->online_payment == 'edfa') {
                 $success = [
-                    'payment_url' => $result->Data->PaymentURL
+                    'payment_url' => express_payment($setting->edfa_merchant_key, $setting->edfa_password, $amount, 'checkEdfaHotelStatus', $hotel->subscription->id, $hotel->name_ar, $hotel->email)
                 ];
                 return ApiController::respondWithSuccess($success);
-            } else {
-                $error = [
-                    'message' => trans('messages.errorPayment')
-                ];
-                return ApiController::respondWithErrorObject($error);
+            }
+            else {
+                if ($request->online_type == 'visa') {
+                    $charge = 2;
+                } elseif ($request->online_type == 'mada') {
+                    $charge = 6;
+                } elseif ($request->online_type == 'apple_pay') {
+                    $charge = 11;
+                } else {
+                    $charge = 2;
+                }
+                $name = $hotel->subdomain;
+                $token = Setting::first()->online_token;
+                $data = array(
+                    'PaymentMethodId' => $charge,
+                    'CustomerName' => $name,
+                    'DisplayCurrencyIso' => 'SAR',
+                    'MobileCountryCode' => '00966',
+                    'CustomerMobile' => $hotel->country->id == 1 ? $hotel->phone_number : '0500000000',
+                    'CustomerEmail' => $hotel->email,
+                    'InvoiceValue' => $amount,
+                    'CallBackUrl' => url('/check-hotel-status'),
+                    'ErrorUrl' => url('/error'),
+                    'Language' => app()->getLocale(),
+                    'CustomerReference' => 'ref 1',
+                    'CustomerCivilId' => '12345678',
+                    'UserDefinedField' => 'Custom field',
+                    'ExpireDate' => '',
+                    'CustomerAddress' => array(
+                        'Block' => '',
+                        'Street' => '',
+                        'HouseBuildingNo' => '',
+                        'Address' => '',
+                        'AddressInstructions' => '',
+                    ),
+                    'InvoiceItems' => [array(
+                        'ItemName' => $name,
+                        'Quantity' => '1',
+                        'UnitPrice' => $amount,
+                    )],
+                );
+                $data = json_encode($data);
+                $fatooraRes = MyFatoorah($token, $data);
+                $result = json_decode($fatooraRes);
+                if ($result != null and $result->IsSuccess === true) {
+                    $hotel->subscription->update([
+                        'invoice_id' => $result->Data->InvoiceId,
+                        'payment_type' => $request->payment_method,
+                        'amount' => $price,
+                        'tax_value' => $tax_value,
+                        'discount_value' => $discount,
+                        'seller_code_id' => $seller_code?->id,
+                    ]);
+                    $success = [
+                        'payment_url' => $result->Data->PaymentURL
+                    ];
+                    return ApiController::respondWithSuccess($success);
+                } else {
+                    $error = [
+                        'message' => trans('messages.errorPayment')
+                    ];
+                    return ApiController::respondWithErrorObject($error);
+                }
             }
         }
     }
@@ -183,14 +191,14 @@ class SubscriptionController extends Controller
                 'package_id' => $subscription->package->id,
                 'branch_id' => $subscription->branch_id,
                 'payment_type' => 'online',
-                'details' =>   ($subscription->status == 'tentative' or $subscription->status == 'tentative_finished') ? trans('messages.hotel_new_subscribe') : trans('messages.hotel_renew_subscribe'),
+                'details' => ($subscription->status == 'tentative' or $subscription->status == 'tentative_finished') ? trans('messages.hotel_new_subscribe') : trans('messages.hotel_renew_subscribe'),
                 'invoice_id' => $subscription->invoice_id,
-                'price'     => $subscription->amount,
+                'price' => $subscription->amount,
                 'paid_amount' => $subscription->amount,
                 'discount_value' => $subscription->discount_value,
-                'tax_value'      => $subscription->tax_value,
+                'tax_value' => $subscription->tax_value,
                 'operation_date' => Carbon::now(),
-                'status'     => ($subscription->status == 'tentative' or $subscription->status == 'tentative_finished') ? 'new' : 'renew'
+                'status' => ($subscription->status == 'tentative' or $subscription->status == 'tentative_finished') ? 'new' : 'renew'
             ]);
             $subscription->update([
                 'status' => 'active',
@@ -225,17 +233,18 @@ class SubscriptionController extends Controller
 
             }
             $success = [
-                'message'  => trans('messages.paymentDoneSuccessfully'),
+                'message' => trans('messages.paymentDoneSuccessfully'),
             ];
             return ApiController::respondWithSuccess($success);
-        }else{
+        } else {
             $error = [
                 'message' => trans('messages.errorPayment')
             ];
             return ApiController::respondWithErrorObject($error);
         }
     }
-    public function check_edfa_status(Request $request , $id)
+
+    public function check_edfa_status(Request $request, $id)
     {
         $subscription = Subscription::find($id);
         if ($subscription) {
@@ -245,14 +254,14 @@ class SubscriptionController extends Controller
                 'package_id' => $subscription->package->id,
                 'branch_id' => $subscription->branch_id,
                 'payment_type' => 'online',
-                'details' =>   ($subscription->status == 'tentative' or $subscription->status == 'tentative_finished') ? trans('messages.hotel_new_subscribe') : trans('messages.hotel_renew_subscribe'),
+                'details' => ($subscription->status == 'tentative' or $subscription->status == 'tentative_finished') ? trans('messages.hotel_new_subscribe') : trans('messages.hotel_renew_subscribe'),
                 'invoice_id' => $subscription->invoice_id,
-                'price'     => $subscription->amount,
+                'price' => $subscription->amount,
                 'paid_amount' => $subscription->amount,
                 'discount_value' => $subscription->discount_value,
-                'tax_value'      => $subscription->tax_value,
+                'tax_value' => $subscription->tax_value,
                 'operation_date' => Carbon::now(),
-                'status'     => ($subscription->status == 'tentative' or $subscription->status == 'tentative_finished') ? 'new' : 'renew'
+                'status' => ($subscription->status == 'tentative' or $subscription->status == 'tentative_finished') ? 'new' : 'renew'
             ]);
             $subscription->update([
                 'status' => 'active',
@@ -287,16 +296,17 @@ class SubscriptionController extends Controller
 
             }
             $success = [
-                'message'  => trans('messages.paymentDoneSuccessfully'),
+                'message' => trans('messages.paymentDoneSuccessfully'),
             ];
             return ApiController::respondWithSuccess($success);
-        }else{
+        } else {
             $error = [
                 'message' => trans('messages.errorPayment')
             ];
             return ApiController::respondWithErrorObject($error);
         }
     }
+
     public function subscribe_price(Request $request)
     {
         $hotel = $request->user();
@@ -309,9 +319,9 @@ class SubscriptionController extends Controller
 
         $success = [
             'subscribe_price' => $subscribe_price,
-            'tax_value'       => $tax_value,
-            'total_price'     => $total,
-            'currency'        => app()->getLocale() == 'ar' ? $hotel->country->currency_ar: $hotel->country->currency_en,
+            'tax_value' => $tax_value,
+            'total_price' => $total,
+            'currency' => app()->getLocale() == 'ar' ? $hotel->country->currency_ar : $hotel->country->currency_en,
         ];
         return ApiController::respondWithSuccess($success);
     }

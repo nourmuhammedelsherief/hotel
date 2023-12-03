@@ -19,5 +19,8 @@ class Setting extends Model
         'tentative_period',
         'tax',
         'online_token',
+        'edfa_merchant_key',
+        'edfa_password',
+        'online_payment',
     ];
 }

@@ -39,6 +39,9 @@ class SettingController extends Controller
             'tentative_period' => 'sometimes',
             'tax' => 'sometimes',
             'online_token' => 'sometimes',
+            'edfa_merchant_key' => 'sometimes',
+            'edfa_password'     => 'sometimes',
+            'online_payment'    => 'sometimes',
         ];
         $validator = Validator::make($request->all(), $rules);
         if ($validator->fails())
@@ -54,6 +57,9 @@ class SettingController extends Controller
             'tentative_period' => $request->tentative_period == null ? $setting->tentative_period : $request->tentative_period,
             'tax'   => $request->tax == null ? $setting->tax : $request->tax,
             'online_token'   => $request->online_token == null ? $setting->online_token : $request->online_token,
+            'edfa_merchant_key' => $request->edfa_merchant_key == null ? $setting->edfa_merchant_key : $request->edfa_merchant_key,
+            'edfa_password'     => $request->edfa_password == null ? $setting->edfa_password : $request->edfa_password,
+            'online_payment'    => $request->online_payment == null ? $setting->online_payment : $request->online_payment,
         ]);
         return ApiController::respondWithSuccess(new SettingResource($setting));
     }
