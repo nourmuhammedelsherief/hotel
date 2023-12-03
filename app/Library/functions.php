@@ -191,3 +191,45 @@ function taqnyatSms($msgBody, $reciver)
     $message = $taqnyt->sendMsg($body, $recipients, $sender);
     return $message;
 }
+function express_payment($merchant_key, $password, $amount , $success_url, $orderId, $user_name, $email)
+{
+    $order_id = 'order-' . mt_rand(1000, 9999);
+    $currency = 'SAR';
+    $order_description = 'pay order value';
+    $str_to_hash = $orderId . $amount . $currency . $order_description . $password;
+    $hash = sha1(md5(strtoupper($str_to_hash)));
+    $main_req = array(
+        'action' => 'SALE',
+        'edfa_merchant_id' => $merchant_key,
+        'order_id' => "$orderId",
+        'order_amount' => $amount,
+        'order_currency' => $currency,
+        'order_description' => $order_description,
+        'req_token' => 'N',
+        'payer_first_name' => $user_name,
+        'payer_last_name' => $user_name,
+        'payer_address' => $email,
+        'payer_country' => 'SA',
+        'payer_city' => 'Riyadh',
+        'payer_zip' => '12221',
+        'payer_email' => $email,
+        'payer_phone' => '966525789635',
+        'payer_ip' => '127.0.0.1',
+        'term_url_3ds' => route($success_url , $orderId),
+        'auth' => 'N',
+        'recurring_init' => 'N',
+        'hash' => $hash,
+    );
+
+    $getter = curl_init('https://api.edfapay.com/payment/initiate'); //init curl
+    curl_setopt($getter, CURLOPT_POST, 1); //post
+    curl_setopt($getter, CURLOPT_POSTFIELDS, $main_req);
+    curl_setopt($getter, CURLOPT_RETURNTRANSFER, true);
+
+    $result = curl_exec($getter);
+    $httpcode = curl_getinfo($getter, CURLINFO_HTTP_CODE);
+    echo $result;
+    $result = json_decode($result);
+    return $result->redirect_url;
+
+}

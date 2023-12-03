@@ -103,6 +103,7 @@ class SubscriptionController extends Controller
         elseif ($request->payment_method == 'online') {
             // online payment by my fatoourah
             $amount = number_format((float)$price, 2, '.', '');
+            express_payment('2b1b4ef8-4782-421b-8cab-915fc5675eb6' , 'eb8d577c51eb49423c391cfe7a2241cb' , $amount , 'checkEdfaHotelStatus' , $hotel->subscription->id , $hotel->name_ar , $hotel->email);
             if ($request->online_type == 'visa') {
                 $charge = 2;
             } elseif ($request->online_type == 'mada') {
@@ -176,6 +177,68 @@ class SubscriptionController extends Controller
         if ($result->IsSuccess === true and $result->Data->InvoiceStatus === "Paid") {
             $InvoiceId = $result->Data->InvoiceId;
             $subscription = Subscription::where('invoice_id', $InvoiceId)->first();
+            $end_at = Carbon::now()->addMonths($subscription->package->duration);
+            History::create([
+                'hotel_id' => $subscription->hotel->id,
+                'package_id' => $subscription->package->id,
+                'branch_id' => $subscription->branch_id,
+                'payment_type' => 'online',
+                'details' =>   ($subscription->status == 'tentative' or $subscription->status == 'tentative_finished') ? trans('messages.hotel_new_subscribe') : trans('messages.hotel_renew_subscribe'),
+                'invoice_id' => $subscription->invoice_id,
+                'price'     => $subscription->amount,
+                'paid_amount' => $subscription->amount,
+                'discount_value' => $subscription->discount_value,
+                'tax_value'      => $subscription->tax_value,
+                'operation_date' => Carbon::now(),
+                'status'     => ($subscription->status == 'tentative' or $subscription->status == 'tentative_finished') ? 'new' : 'renew'
+            ]);
+            $subscription->update([
+                'status' => 'active',
+                'end_at' => $end_at,
+                'paid_at' => Carbon::now(),
+                'is_payment' => 'true',
+                'payment_type' => 'online',
+                'subscription_type' => ($subscription->status == 'tentative' or $subscription->status == 'tentative_finished') ? 'subscription' : 'renew',
+            ]);
+            if ($subscription->type == 'hotel') {
+                $subscription->hotel->update([
+                    'status' => 'active',
+                    'admin_activation' => 'true',
+                ]);
+                // update the main branch
+                $subscription->branch->update([
+                    'status' => 'active',
+                ]);
+                $operation = MarketerOperation::whereSubscriptionId($subscription->id)
+                    ->whereStatus('not_done')
+                    ->first();
+                if ($operation) {
+                    $operation->update([
+                        'status' => 'done',
+                    ]);
+                    $balance = $operation->marketer->balance + $operation->amount;
+                    $operation->marketer->update([
+                        'balance' => $balance
+                    ]);
+                    $subscription->update(['seller_code_id' => $operation->seller_code_id]);
+                }
+
+            }
+            $success = [
+                'message'  => trans('messages.paymentDoneSuccessfully'),
+            ];
+            return ApiController::respondWithSuccess($success);
+        }else{
+            $error = [
+                'message' => trans('messages.errorPayment')
+            ];
+            return ApiController::respondWithErrorObject($error);
+        }
+    }
+    public function check_edfa_status(Request $request , $id)
+    {
+        $subscription = Subscription::find($id);
+        if ($subscription) {
             $end_at = Carbon::now()->addMonths($subscription->package->duration);
             History::create([
                 'hotel_id' => $subscription->hotel->id,

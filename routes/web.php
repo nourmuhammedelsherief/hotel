@@ -26,6 +26,7 @@ use \App\Http\Controllers\AdminController\AdminController;
 |
 */
 Route::get('/check-hotel-status/{id1?}/{id2?}', [\App\Http\Controllers\Api\HotelController\SubscriptionController::class , 'check_status'])->name('checkHotelStatus');
+Route::get('/edfa-check-hotel-status/{id1?}/{id2?}', [\App\Http\Controllers\Api\HotelController\SubscriptionController::class , 'check_edfa_status'])->name('checkEdfaHotelStatus');
 Route::get('/error', function (){
     $error = [
         'message' => trans('messages.errorPayment')
