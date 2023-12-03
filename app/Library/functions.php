@@ -196,7 +196,7 @@ function express_payment($merchant_key, $password, $amount , $success_url, $orde
     $order_id = 'order-' . $orderId;
     $currency = 'SAR';
     $order_description = 'pay order value';
-    $str_to_hash = $orderId . $amount . $currency . $order_description . $password;
+    $str_to_hash = $order_id . $amount . $currency . $order_description . $password;
     $hash = sha1(md5(strtoupper($str_to_hash)));
     $main_req = array(
         'action' => 'SALE',
@@ -229,7 +229,6 @@ function express_payment($merchant_key, $password, $amount , $success_url, $orde
     $result = curl_exec($getter);
     $httpcode = curl_getinfo($getter, CURLINFO_HTTP_CODE);
     $result = json_decode($result);
-    dd($result);
     return $result->redirect_url;
 
 }
