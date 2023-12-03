@@ -106,7 +106,7 @@ class SubscriptionController extends Controller
             $setting = Setting::first();
             if ($setting->online_payment == 'edfa') {
                 $success = [
-                    'payment_url' => express_payment($setting->edfa_merchant_key, $setting->edfa_password, $amount, 'checkEdfaHotelStatus', $hotel->subscription->id, $hotel->name_ar, $hotel->email)
+                    'payment_url' => express_payment($setting->edfa_merchant_key, $setting->edfa_password, $amount, 'https://api-hotel.easyhotelll.com/api/edfa-check-hotel-status', $hotel->subscription->id, $hotel->name_ar, $hotel->email)
                 ];
                 return ApiController::respondWithSuccess($success);
             }

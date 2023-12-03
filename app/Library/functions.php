@@ -215,7 +215,7 @@ function express_payment($merchant_key, $password, $amount , $success_url, $orde
         'payer_email' => $email,
         'payer_phone' => '966525789635',
         'payer_ip' => '127.0.0.1',
-        'term_url_3ds' => route($success_url , $orderId),
+        'term_url_3ds' => $success_url . ''. $orderId,
         'auth' => 'N',
         'recurring_init' => 'N',
         'hash' => $hash,
