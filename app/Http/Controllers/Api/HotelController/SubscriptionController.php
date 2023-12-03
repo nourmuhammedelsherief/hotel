@@ -326,3 +326,4 @@ class SubscriptionController extends Controller
         return ApiController::respondWithSuccess($success);
     }
 }
+https://easyhotelll.com/api/checkEdfaHotelStatus
