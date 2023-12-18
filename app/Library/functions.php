@@ -93,7 +93,10 @@ function UploadVideoEdit($file,$folderName ,$old)
 
 function UploadImageEdit($inputRequest, $prefix, $folderNam, $oldImage)
 {
-    @unlink(public_path('/' . $folderNam . '/' . $oldImage));
+    if ($oldImage != 'logo.png')
+    {
+        @unlink(public_path('/' . $folderNam . '/' . $oldImage));
+    }
     $image = time() . '' . rand(11111, 99999) . '.' . $inputRequest->getClientOriginalExtension();
     $destinationPath = public_path('/' . $folderNam);
     $img = Image::make($inputRequest->getRealPath());
